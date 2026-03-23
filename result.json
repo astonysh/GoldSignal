@@ -1,11 +1,11 @@
 {
   "date": "2026-03-23",
-  "condition1_score": 10,
+  "condition1_score": 15,
   "condition2_score": 25,
-  "condition3_score": 75,
+  "condition3_score": 65,
   "overall_signal": "AVOID",
-  "tips_yield": 2.0,
-  "hy_spread": 350,
-  "fed_balance": 700,
-  "dollar_index": 104.0
+  "tips_yield": 1.88,
+  "hy_spread": 324,
+  "fed_balance": 66559,
+  "dollar_index": 120.55
 }
