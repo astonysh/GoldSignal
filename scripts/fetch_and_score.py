@@ -32,6 +32,12 @@ import requests
 # ============================================================
 FRED_API_KEY = os.environ.get("FRED_API_KEY", "")
 
+# Worker 接口地址，从环境变量读取
+WORKER_URL = os.environ.get("WORKER_URL", "")
+
+# Worker 写入密钥，从环境变量读取
+WORKER_WRITE_TOKEN = os.environ.get("WORKER_WRITE_TOKEN", "")
+
 # FRED API 基础地址
 FRED_BASE_URL = "https://api.stlouisfed.org/fred/series/observations"
 
@@ -467,6 +473,40 @@ def save_results(
         print(f"[警告] 无法保存结果文件：{e}")
 
 
+def send_to_worker(result):
+    """把评分结果发送到 Cloudflare Worker 存入 D1 数据库"""
+
+    # 如果没有配置 Worker URL，跳过这一步
+    if not WORKER_URL or not WORKER_WRITE_TOKEN:
+        print("\n[提示] 未配置 WORKER_URL 或 WORKER_WRITE_TOKEN，跳过发送到数据库。")
+        return False
+
+    url = f"{WORKER_URL}/api/update"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {WORKER_WRITE_TOKEN}"
+    }
+
+    try:
+        print(f"\n正在发送数据到 Worker：{url}")
+        response = requests.post(url, json=result, headers=headers, timeout=15)
+
+        if response.status_code == 200:
+            print(f"  ✓ 数据已成功写入数据库，日期：{result['date']}")
+            return True
+        else:
+            print(f"  [错误] Worker 返回状态码：{response.status_code}")
+            print(f"  响应内容：{response.text}")
+            return False
+
+    except requests.exceptions.Timeout:
+        print("  [错误] 发送超时，Worker 没有在 15 秒内响应")
+        return False
+    except Exception as e:
+        print(f"  [错误] 发送失败：{e}")
+        return False
+
+
 # ============================================================
 # 主函数入口
 # ============================================================
@@ -528,6 +568,21 @@ def main() -> None:
         score3        = score3,
         signal        = signal,
     )
+
+    result = {
+        "date":              today,
+        "condition1_score":  round(score1),
+        "condition2_score":  round(score2),
+        "condition3_score":  round(score3),
+        "overall_signal":    signal,
+        "tips_yield":        round(tips_yield, 4),
+        "hy_spread":         round(hy_bps),
+        "fed_balance":       round(fed_balance),
+        "dollar_index":      round(dollar_index, 2),
+    }
+
+    # 发送到 Worker 数据库
+    send_to_worker(result)
 
 
 if __name__ == "__main__":

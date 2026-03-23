@@ -1,0 +1,36 @@
+name: 每日黄金信号更新
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # 每天 UTC 01:00 运行
+  workflow_dispatch:      # 允许手动触发
+
+jobs:
+  update-signal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      - name: 设置 Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: 安装依赖
+        run: pip install requests
+
+      - name: 运行数据抓取和评分脚本
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          WORKER_URL: ${{ secrets.WORKER_URL }}
+          WORKER_WRITE_TOKEN: ${{ secrets.WORKER_WRITE_TOKEN }}
+        run: python scripts/fetch_and_score.py
+
+      - name: 提交并推送结果
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add result.json
+          git commit -m "自动更新每日评分: $(date +'%Y-%m-%d')" || exit 0
+          git push
