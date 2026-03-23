@@ -1,5 +1,7 @@
 # Gold Macro Signal System
 
+[English](#gold-macro-signal-system) | [Türkçe](#altin-makro-sinyal-sistemi) | [中文](#黄金宏观信号系统)
+
 > **Disclaimer:** This tool provides macroeconomic environment analysis only.
 > It does not constitute investment advice of any kind.
 
