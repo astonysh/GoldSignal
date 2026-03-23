@@ -84,7 +84,7 @@
             padding-bottom: 24px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .brand h1 { font-size: 28px; font-weight: 800; letter-spacing: -1px; background: linear-gradient(to bottom right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .brand h1 { font-size: 28px; font-weight: 800; letter-spacing: -1px; background: linear-gradient(to bottom right, #fff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         .brand p { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
         
         .header-controls { display: flex; align-items: center; gap: 20px; }
@@ -113,6 +113,26 @@
             background: rgba(255,255,255,0.1);
             color: var(--text-primary);
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .github-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .github-link:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-primary);
+            border-color: rgba(255,255,255,0.2);
+            transform: scale(1.05);
         }
 
         /* Main Signal Card (Glass) */
@@ -239,6 +259,9 @@
                     <button class="lang-btn" onclick="setLanguage('tr')">TR</button>
                 </div>
                 <div class="last-updated" id="updated-at">--</div>
+                <a href="https://github.com/astonysh/GoldSignal" target="_blank" class="github-link" title="Open GitHub Repository">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                </a>
             </div>
         </header>
 
@@ -299,6 +322,12 @@
             <div class="disclaimer" id="disclaimer-text">
                 This tool provides macroeconomic environment analysis only. It does not constitute investment advice of any kind.
             </div>
+            <div style="margin-top: 20px;">
+                <a href="https://github.com/astonysh/GoldSignal" target="_blank" style="color: var(--accent-blue); text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                    <span id="contribute-text">Contribute on GitHub</span>
+                </a>
+            </div>
         </footer>
     </div>
 
@@ -329,6 +358,7 @@
                 extDxy: "DXY Index",
                 chart1: "10-Year TIPS Real Yield Trend (%)",
                 chart2: "High-Yield Credit Spread Trend (bps)",
+                contribute: "Contribute on GitHub",
                 signals: {
                     HOLD: { label: "HOLD", desc: "Real rates low & credit stress contained. Environment favorable for gold." },
                     STRUCTURAL_SUPPORT: { label: "STRUCTURAL SUPPORT", desc: "Central bank structural buying provides a floor despite macro headwinds." },
@@ -355,6 +385,7 @@
                 extDxy: "美元指数",
                 chart1: "10年期 TIPS 实际收益率趋势 (%)",
                 chart2: "高收益债利差趋势 (bps)",
+                contribute: "在 GitHub 上参与项目贡献",
                 signals: {
                     HOLD: { label: "持有 · HOLD", desc: "实际利率低且信用风险可控，宏观环境对金价有利。" },
                     STRUCTURAL_SUPPORT: { label: "结构性支撑", desc: "尽管宏观环境有阻力，但央行结构性需求提供下限支撑。" },
@@ -381,6 +412,7 @@
                 extDxy: "DXY Endeksi",
                 chart1: "10 Yıllık TIPS Reel Getiri Trendi (%)",
                 chart2: "Yüksek Getirili Kredi Spread Trendi (bps)",
+                contribute: "GitHub'da katkıda bulunun",
                 signals: {
                     HOLD: { label: "TUT · HOLD", desc: "Reel faizler düşük ve kredi riski kontrol altında. Ortam altın için elverişli." },
                     STRUCTURAL_SUPPORT: { label: "YAPISAL DESTEK", desc: "Makro engellere rağmen merkez bankası alımları yapısal destek sağlıyor." },
@@ -417,6 +449,7 @@
             
             document.getElementById('chart1-title').innerText = t.chart1;
             document.getElementById('chart2-title').innerText = t.chart2;
+            document.getElementById('contribute-text').innerText = t.contribute;
 
             if (latestData) updateSignalAndScores(latestData);
         }
