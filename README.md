@@ -2,6 +2,8 @@
 
 [English](#gold-macro-signal-system) | [Türkçe](#altin-makro-sinyal-sistemi) | [中文](#黄金宏观信号系统)
 
+🌐 **Live Demo:** [https://gsignal.pages.dev](https://gsignal.pages.dev)
+
 > **Disclaimer:** This tool provides macroeconomic environment analysis only.
 > It does not constitute investment advice of any kind.
 
@@ -84,6 +86,8 @@ Apache License 2.0 — free to use, modify, and distribute.
 
 # Altin Makro Sinyal Sistemi
 
+🌐 **Canlı Demo:** [https://gsignal.pages.dev](https://gsignal.pages.dev)
+
 > Sorumluluk Reddi: Bu arac yalnizca makroekonomik ortam analizi saglar.
 > Herhangi bir yatirim tavsiyesi niteligini tasimaz.
 
@@ -136,6 +140,8 @@ Apache Lisansı 2.0 — ozgurce kullanin, degistirin ve dagatin.
 ---
 
 # 黄金宏观信号系统
+
+🌐 **在线演示：** [https://gsignal.pages.dev](https://gsignal.pages.dev)
 
 > 免责声明：本工具仅提供宏观环境数据分析，不构成任何投资建议。
 
