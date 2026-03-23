@@ -16,18 +16,20 @@
     <style>
         :root {
             --bg-color: #050505;
-            --card-bg: rgba(26, 26, 26, 0.6);
-            --card-border: rgba(255, 255, 255, 0.1);
+            --surface-color: #0d0d0d;
+            --card-bg: #161b22;
+            --card-border: rgba(255, 255, 255, 0.08);
             --text-primary: #ffffff;
-            --text-secondary: #94a3b8;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
             --accent-blue: #3b82f6;
             --accent-orange: #f97316;
-            --success: #10b981;
-            --success-light: #34d399;
-            --warning: #facc15;
-            --danger: #ef4444;
-            --border-radius: 16px;
-            --glass-blur: 12px;
+            --accent-purple: #8b5cf6;
+            --success: #1a4a2e;
+            --warning: rgba(255, 193, 7, 0.06);
+            --danger: #4a1a1a;
+            --border-radius: 12px;
+            --container-width: 1100px;
         }
 
         * {
@@ -38,18 +40,17 @@
 
         body {
             background-color: var(--bg-color);
-            background-image: radial-gradient(circle at 50% -20%, #1e293b 0%, #050505 80%);
+            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #050505 100%);
             color: var(--text-primary);
             font-family: 'Inter', -apple-system, sans-serif;
-            line-height: 1.5;
-            padding-bottom: 60px;
-            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1100px;
+            max-width: var(--container-width);
             margin: 0 auto;
-            padding: 24px;
+            padding: 0 24px;
         }
 
         /* Loading & Error States */
@@ -61,212 +62,388 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            transition: opacity 0.5s ease;
+            z-index: 2000;
         }
-        #error-overlay { display: none; color: var(--danger); text-align: center; padding: 40px; }
         .spinner {
-            width: 50px; height: 50px;
+            width: 48px; height: 48px;
             border: 3px solid rgba(255,255,255,0.05);
             border-top: 3px solid var(--accent-blue);
             border-radius: 50%;
-            animation: spin 0.8s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            animation: spin 1s linear infinite;
             margin-bottom: 24px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Header */
+        /* Header Optimization */
         header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 48px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+        header .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
-            padding-bottom: 24px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            width: 100%;
         }
-        .brand h1 { font-size: 28px; font-weight: 800; letter-spacing: -1px; background: linear-gradient(to bottom right, #fff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-        .brand p { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
+        .brand h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+        .brand p { color: var(--text-secondary); font-size: 13px; font-weight: 500; }
+
+        .header-controls { display: flex; align-items: center; gap: 16px; }
         
-        .header-controls { display: flex; align-items: center; gap: 20px; }
-        .last-updated { text-align: right; color: var(--text-secondary); font-size: 13px; font-variant-numeric: tabular-nums; }
-        
-        /* Language Switcher */
+        /* Language Capsule */
         .lang-switcher {
             display: flex;
             background: rgba(255,255,255,0.05);
-            padding: 4px;
-            border-radius: 8px;
+            padding: 3px;
+            border-radius: 99px;
             border: 1px solid rgba(255,255,255,0.1);
         }
         .lang-btn {
-            padding: 6px 12px;
+            padding: 4px 12px;
             border: none;
             background: transparent;
-            color: var(--text-secondary);
-            font-size: 12px;
-            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
             cursor: pointer;
-            border-radius: 6px;
+            border-radius: 99px;
             transition: all 0.2s;
         }
         .lang-btn.active {
-            background: rgba(255,255,255,0.1);
-            color: var(--text-primary);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            background: white;
+            color: black;
         }
 
         .github-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
+            padding: 8px 12px;
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 8px;
             color: var(--text-secondary);
-            transition: all 0.2s;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
         }
         .github-link:hover {
             background: rgba(255,255,255,0.1);
-            color: var(--text-primary);
-            border-color: rgba(255,255,255,0.2);
-            transform: scale(1.05);
+            color: white;
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
         }
 
-        /* Main Signal Card (Glass) */
+        /* Signal Section */
+        .signal-block { margin-bottom: 48px; width: 100%; }
         .signal-card {
-            border-radius: 24px;
-            padding: 60px 40px;
-            margin-bottom: 40px;
-            text-align: center;
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow: hidden;
+            border-radius: 20px;
+            padding: 48px 32px;
+            min-height: 200px;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
             border: 1px solid rgba(255,255,255,0.1);
+            transition: box-shadow 0.3s ease;
         }
-        .signal-card::after {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%);
-            pointer-events: none;
+        .signal-label { 
+            font-size: 56px; 
+            font-weight: 800; 
+            margin-bottom: 16px; 
+            letter-spacing: -1px; 
+            line-height: 1;
         }
-        .signal-label { font-size: 48px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 2px; }
-        .signal-desc { font-size: 18px; opacity: 0.9; font-weight: 500; max-width: 600px; }
+        .signal-divider {
+            width: 40px;
+            height: 2px;
+            background: rgba(255,255,255,0.2);
+            margin-bottom: 16px;
+        }
+        .signal-desc { font-size: 16px; font-weight: 500; opacity: 0.9; max-width: 600px; }
 
-        /* Condition Cards Grid */
+        /* Signal Colors */
+        .sig-HOLD { background: linear-gradient(135deg, #1a4a2e 0%, #0d2e1a 100%); border-color: #2e6d4a; }
+        .sig-STRUCTURAL_SUPPORT { background: linear-gradient(135deg, #1a3a4a 0%, #0d2030 100%); border-color: #2e5a6a; }
+        .sig-WATCH { background: linear-gradient(135deg, #4a3a0d 0%, #2e2208 100%); border-color: #6d5a2e; }
+        .sig-AVOID { background: linear-gradient(135deg, #4a1a1a 0%, #2e0d0d 100%); border-color: #6d2e2e; }
+
+        /* Scores Grid */
+        .conditions-section { margin-bottom: 48px; }
         .conditions-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px;
-            margin-bottom: 40px;
         }
         .card {
-            background-color: var(--card-bg);
-            backdrop-filter: blur(var(--glass-blur));
+            background: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 28px;
+            padding: 24px;
             border: 1px solid var(--card-border);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s;
             position: relative;
         }
-        .card:hover { 
-            transform: translateY(-6px); 
-            border-color: rgba(255,255,255,0.2);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        .card:hover { border-color: rgba(255,255,255,0.25); }
+        
+        .card-tag {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
         }
-        .card-title { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; letter-spacing: 1.5px; margin-bottom: 6px; }
-        .card-subtitle { font-size: 15px; color: var(--text-primary); font-weight: 600; }
+        .tag-c1 { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
+        .tag-c2 { background: rgba(249, 115, 22, 0.1); color: var(--accent-orange); }
+        .tag-c3 { background: rgba(139, 92, 246, 0.1); color: var(--accent-purple); }
+
+        .card-title { font-size: 16px; font-weight: 700; margin-bottom: 24px; }
         
-        .progress-container { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; margin: 24px 0; overflow: hidden; }
-        .progress-bar { height: 100%; width: 0%; transition: width 1.2s cubic-bezier(0.65, 0, 0.35, 1), background-color 0.4s; }
-        
-        .card-footer { display: flex; justify-content: space-between; align-items: baseline; }
-        .card-value { font-size: 36px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -1px; }
-        .card-extra { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
+        .score-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 6px; }
+        .score-val { font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; }
+        .score-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+
+        .progress-container { height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; margin-bottom: 24px; }
+        .progress-bar { height: 100%; border-radius: 2px; transition: width 1s ease; }
+
+        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; }
+        .value-display { font-size: 32px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
+        .value-unit { font-size: 12px; color: var(--text-muted); font-weight: 600; padding-bottom: 4px; }
 
         /* Charts Section */
         .charts-section {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 24px;
-            margin-bottom: 60px;
+            margin-bottom: 48px;
         }
-        .chart-container {
-            background-color: var(--card-bg);
-            backdrop-filter: blur(var(--glass-blur));
+        .chart-box {
+            background: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 30px;
+            padding: 24px;
             border: 1px solid var(--card-border);
-            height: 400px;
         }
-        .chart-container h3 { font-size: 15px; margin-bottom: 24px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .chart-header { display: flex; align-items: center; margin-bottom: 20px; }
+        .chart-title { 
+            font-size: 14px; 
+            font-weight: 700; 
+            line-height: 1;
+            padding-left: 12px;
+        }
+        .chart-title-blue { border-left: 3px solid var(--accent-blue); }
+        .chart-title-orange { border-left: 3px solid var(--accent-orange); }
+        
+        .canvas-wrapper { height: 220px; position: relative; }
+        .chart-info-text { font-size: 11px; color: var(--text-muted); margin-top: 12px; }
+        .chart-empty-msg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            background: rgba(22, 27, 34, 0.9); z-index: 10;
+            text-align: center; font-size: 12px; color: var(--text-muted); padding: 20px;
+            border-radius: 8px;
+        }
+
+        /* Theory Section */
+        .theory-section { margin-bottom: 48px; }
+        .section-header { 
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 32px;
+            padding-left: 16px;
+            border-left: 4px solid var(--accent-blue);
+        }
+        .section-header h2 { font-size: 24px; font-weight: 800; }
+
+        .theory-intro { margin-bottom: 24px; }
+        .intro-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            border: 1px solid var(--card-border);
+            border-left: 4px solid var(--accent-blue);
+        }
+        .intro-card h3 { font-size: 18px; margin-bottom: 12px; }
+        .intro-card p { font-size: 14px; color: var(--text-secondary); }
+
+        .accordion-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius);
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: background 0.2s;
+        }
+        .accordion-item:hover { background: #1c2128; }
+        .accordion-item.blue { border-left: 4px solid var(--accent-blue); }
+        .accordion-item.orange { border-left: 4px solid var(--accent-orange); }
+        .accordion-item.purple { border-left: 4px solid var(--accent-purple); }
+
+        summary {
+            padding: 20px 24px;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        summary::-webkit-details-marker { display: none; }
+        .summary-label { display: flex; flex-direction: column; }
+        .label-main { font-size: 16px; font-weight: 700; }
+        .label-sub { font-size: 12px; color: var(--text-muted); padding-top: 2px; }
+        .arrow-icon { transition: transform 0.3s; color: var(--text-muted); font-size: 10px; }
+        details[open] .arrow-icon { transform: rotate(180deg); }
+
+        .accordion-content {
+            padding: 0 24px 24px 24px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        .accordion-content p { margin-bottom: 12px; }
+        .range-table { 
+            background: rgba(0,0,0,0.2); 
+            padding: 16px; 
+            border-radius: 8px; 
+            margin: 16px 0; 
+            border: 1px solid rgba(255,255,255,0.05);
+            font-family: ui-monospace, monospace;
+            font-size: 13px;
+        }
+
+        /* Timeline */
+        .timeline-box { margin-bottom: 48px; }
+        .timeline-box h3 { font-size: 18px; margin-bottom: 24px; }
+        .timeline-container {
+            position: relative;
+            padding-left: 24px;
+        }
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 10px;
+            bottom: 10px;
+            width: 1px;
+            background: rgba(255,255,255,0.1);
+        }
+        .timeline-item { position: relative; margin-bottom: 24px; }
+        .timeline-dot {
+            position: absolute;
+            left: -21px;
+            top: 8px;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            border: 4px solid var(--bg-color);
+            z-index: 2;
+        }
+        .timeline-dot.green { background: #10b981; box-shadow: 0 0 10px rgba(16,185,129,0.3); }
+        .timeline-dot.red { background: #ef4444; box-shadow: 0 0 10px rgba(239,68,68,0.3); }
+
+        .timeline-content {
+            background: rgba(255,255,255,0.02);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+        }
+        .timeline-item.hold .timeline-content { border-left: 4px solid #10b981; }
+        .timeline-item.avoid .timeline-content { border-left: 4px solid #ef4444; }
+
+        .timeline-header { font-size: 13px; font-weight: 800; margin-bottom: 8px; }
+        .tl-tag { font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 4px; margin-left: 8px; text-transform: uppercase; }
+        .tl-tag.green { background: rgba(16,185,129,0.1); color: #10b981; }
+        .tl-tag.red { background: rgba(239,68,68,0.1); color: #ef4444; }
+
+        .timeline-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+        .timeline-result { font-size: 13px; font-weight: 600; }
+        .pos-ret { color: #10b981; }
+        .neg-ret { color: #ef4444; }
+
+        /* Limitations */
+        .limitation-box {
+            background: var(--warning);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            border-left: 4px solid #ffc107;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 48px;
+        }
+        .limitation-box h4 { color: #ffc107; font-size: 16px; margin-bottom: 16px; font-weight: 700; }
+        .limitation-box ul { list-style: none; }
+        .limitation-box li { 
+            position: relative; 
+            padding-left: 16px; 
+            font-size: 13px; 
+            color: var(--text-secondary); 
+            margin-bottom: 8px; 
+            line-height: 1.6;
+        }
+        .limitation-box li::before { content: '·'; position: absolute; left: 0; font-weight: 800; }
 
         /* Footer */
         footer {
+            padding: 48px 0 80px 0;
             text-align: center;
-            padding: 40px 0;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
-        .disclaimer { font-size: 13px; color: #64748b; max-width: 700px; margin: 0 auto; line-height: 1.8; }
-
-        /* Signal Variants */
-        .sig-HOLD { background-color: #065f46; color: #ecfdf5; box-shadow: 0 0 50px rgba(16, 185, 129, 0.2); }
-        .sig-STRUCTURAL_SUPPORT { background-color: #064e3b; color: #d1fae5; box-shadow: 0 0 50px rgba(52, 211, 153, 0.15); }
-        .sig-WATCH { background-color: #78350f; color: #fef3c7; box-shadow: 0 0 50px rgba(250, 204, 21, 0.15); }
-        .sig-AVOID { background-color: #7f1d1d; color: #fee2e2; box-shadow: 0 0 50px rgba(239, 68, 68, 0.2); }
-
-        @media (max-width: 900px) {
-            .charts-section { grid-template-columns: 1fr; }
+        .footer-disclaimer { 
+            font-size: 12px; 
+            color: var(--text-muted); 
+            max-width: 800px; 
+            margin: 0 auto 32px auto;
+            line-height: 1.8;
         }
+        .footer-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .footer-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Mobile Adjustments */
         @media (max-width: 768px) {
-            header { flex-direction: column; align-items: flex-start; gap: 20px; }
+            header { height: auto; padding: 16px 0; margin-bottom: 32px; }
+            header .container { flex-direction: column; gap: 16px; }
             .header-controls { width: 100%; justify-content: space-between; }
+            
+            .signal-card { padding: 32px 20px; min-height: 160px; }
+            .signal-label { font-size: 36px; }
+            
             .conditions-grid { grid-template-columns: 1fr; }
-            .signal-card { padding: 40px 24px; }
-            .signal-label { font-size: 32px; }
-            .signal-desc { font-size: 15px; }
+            .charts-section { grid-template-columns: 1fr; }
+            
+            .section-header h2 { font-size: 20px; }
+            .value-display { font-size: 28px; }
+            
+            .container { padding: 0 16px; }
         }
-
-        /* Theory Section Styles */
-        .theory-section { margin-top: 80px; margin-bottom: 60px; }
-        .section-title { font-size: 24px; font-weight: 700; margin-bottom: 30px; border-left: 4px solid var(--accent-blue); padding-left: 15px; }
-        .theory-card { background: var(--card-bg); backdrop-filter: blur(var(--glass-blur)); border-radius: var(--border-radius); padding: 30px; border: 1px solid var(--card-border); margin-bottom: 30px; }
-        .theory-card h3 { font-size: 18px; margin-bottom: 15px; color: var(--text-primary); }
-        .theory-card p { color: var(--text-secondary); font-size: 15px; line-height: 1.7; }
-
-        .conditions-explainer { display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px; }
-        .detail-card { background: var(--card-bg); border-radius: var(--border-radius); border: 1px solid var(--card-border); overflow: hidden; transition: all 0.3s; }
-        .detail-card[open] { border-color: rgba(255,255,255,0.2); }
-        summary { padding: 20px 25px; cursor: pointer; list-style: none; display: flex; align-items: center; }
-        summary::-webkit-details-marker { display: none; }
-        .summary-content { display: flex; flex-direction: column; }
-        .cond-title { font-size: 17px; font-weight: 700; color: var(--text-primary); }
-        .cond-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
-        .detail-body { padding: 0 25px 25px 25px; color: var(--text-secondary); font-size: 15px; line-height: 1.6; }
-        .detail-body p { margin-bottom: 15px; }
-        .range-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin: 15px 0; font-family: monospace; font-size: 13px; border: 1px solid rgba(255,255,255,0.05); }
-        .watch-text { font-size: 12px; color: var(--accent-blue); font-weight: 600; text-transform: uppercase; }
-
-        .validation-section { margin-bottom: 40px; }
-        .validation-section h3 { font-size: 18px; margin-bottom: 25px; }
-        .timeline { position: relative; padding-left: 30px; border-left: 1px solid rgba(255,255,255,0.1); }
-        .timeline-item { position: relative; margin-bottom: 30px; }
-        .timeline-item::before { content: ''; position: absolute; left: -35px; top: 0; width: 10px; height: 10px; border-radius: 50%; background: var(--text-secondary); border: 2px solid var(--bg-color); }
-        .tl-date { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
-        .tl-content { background: rgba(255,255,255,0.03); padding: 15px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        .tl-sig { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 800; margin-bottom: 10px; }
-        .tl-cond { font-size: 13px; color: var(--text-primary); margin-bottom: 5px; font-weight: 500; }
-        .tl-res { font-size: 13px; color: var(--text-secondary); }
-
-        .limitation-box { background: rgba(133, 77, 14, 0.1); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: var(--border-radius); padding: 25px; margin-bottom: 40px; }
-        .limitation-box h4 { color: var(--warning); margin-bottom: 15px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
-        .limitation-box ul { padding-left: 20px; color: var(--text-secondary); font-size: 14px; }
-        .limitation-box li { margin-bottom: 10px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -282,8 +459,8 @@
         <button onclick="location.reload()" style="margin-top: 24px; padding: 12px 28px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; font-weight: 600; transition: all 0.2s;">Initialize Reconnect</button>
     </div>
 
-    <div class="container">
-        <header>
+    <header>
+        <div class="container">
             <div class="brand">
                 <h1 id="title-text">Gold Macro Signal</h1>
                 <p id="subtitle-text">Macroeconomic environment monitor for gold</p>
@@ -294,86 +471,118 @@
                     <button class="lang-btn" onclick="setLanguage('zh')">中文</button>
                     <button class="lang-btn" onclick="setLanguage('tr')">TR</button>
                 </div>
-                <div class="last-updated" id="updated-at">--</div>
                 <a href="https://github.com/astonysh/GoldSignal" target="_blank" class="github-link" title="Open GitHub Repository">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                    <span>GitHub</span>
                 </a>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <section>
+    <div class="container" style="padding-top: 20px;">
+        <section class="signal-section">
             <div id="main-signal" class="signal-card">
                 <div class="signal-label" id="signal-val">--</div>
+                <div class="signal-divider"></div>
                 <div class="signal-desc" id="signal-info">--</div>
+                <div id="updated-at" style="font-size: 11px; margin-top: 24px; opacity: 0.6; font-weight: 700; font-variant-numeric: tabular-nums;">--</div>
             </div>
         </section>
 
-        <section class="conditions-grid">
-            <!-- C1 -->
-            <div class="card">
-                <div class="card-title" id="t-c1">Condition 1 · Real Interest Rate</div>
-                <div class="card-subtitle" id="st-c1">10-Year TIPS Yield</div>
-                <div class="progress-container"><div id="p-c1" class="progress-bar"></div></div>
-                <div class="card-footer">
-                    <div class="card-value" id="val-c1">--</div>
-                    <div class="card-extra" id="ext-c1">Yield (%)</div>
+        <section class="conditions-section">
+            <div class="conditions-grid">
+                <!-- C1 -->
+                <div class="card">
+                    <span class="card-tag tag-c1" id="tag-c1">Condition 1</span>
+                    <div class="card-title" id="t-c1">Real Interest Rate</div>
+                    <div class="score-row">
+                        <span class="score-label" id="lbl-score-c1">Score</span>
+                        <span class="score-val" id="score-c1">--</span>
+                    </div>
+                    <div class="progress-container"><div id="p-c1" class="progress-bar"></div></div>
+                    <div class="card-footer">
+                        <div class="value-display" id="val-c1">--</div>
+                        <div class="value-unit" id="ext-c1">Yield (%)</div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- C2 -->
-            <div class="card">
-                <div class="card-title" id="t-c2">Condition 2 · Credit Stress</div>
-                <div class="card-subtitle" id="st-c2">High-Yield Spread</div>
-                <div class="progress-container"><div id="p-c2" class="progress-bar"></div></div>
-                <div class="card-footer">
-                    <div class="card-value" id="val-c2">--</div>
-                    <div class="card-extra" id="ext-c2">Spread (bps)</div>
+                <!-- C2 -->
+                <div class="card">
+                    <span class="card-tag tag-c2" id="tag-c2">Condition 2</span>
+                    <div class="card-title" id="t-c2">Credit Stress</div>
+                    <div class="score-row">
+                        <span class="score-label" id="lbl-score-c2">Score</span>
+                        <span class="score-val" id="score-c2">--</span>
+                    </div>
+                    <div class="progress-container"><div id="p-c2" class="progress-bar"></div></div>
+                    <div class="card-footer">
+                        <div class="value-display" id="val-c2">--</div>
+                        <div class="value-unit" id="ext-c2">Spread (bps)</div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- C3 -->
-            <div class="card">
-                <div class="card-title" id="t-c3">Condition 3 · CB Gold Buying</div>
-                <div class="card-subtitle" id="st-c3">Structural Support</div>
-                <div class="progress-container"><div id="p-c3" class="progress-bar"></div></div>
-                <div class="card-footer">
-                    <div class="card-value" id="val-c3">--</div>
-                    <div class="card-extra" id="ext-c3">DXY Index</div>
+                <!-- C3 -->
+                <div class="card">
+                    <span class="card-tag tag-c3" id="tag-c3">Condition 3</span>
+                    <div class="card-title" id="t-c3">CB Gold Buying</div>
+                    <div class="score-row">
+                        <span class="score-label" id="lbl-score-c3">Score</span>
+                        <span class="score-val" id="score-c3">--</span>
+                    </div>
+                    <div class="progress-container"><div id="p-c3" class="progress-bar"></div></div>
+                    <div class="card-footer">
+                        <div class="value-display" id="val-c3">--</div>
+                        <div class="value-unit" id="ext-c3">DXY Index</div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section class="charts-section">
-            <div class="chart-container">
-                <h3 id="chart1-title">10-Year TIPS Real Yield Trend (%)</h3>
-                <canvas id="chart1"></canvas>
+            <div class="chart-box">
+                <div class="chart-header">
+                    <h3 class="chart-title chart-title-blue" id="chart1-title">10-Year TIPS Real Yield Trend (%)</h3>
+                </div>
+                <div class="canvas-wrapper">
+                    <div id="chart1-msg" class="chart-empty-msg" style="display: none;">Insufficient historical data to render trend.</div>
+                    <canvas id="chart1"></canvas>
+                </div>
+                <p class="chart-info-text">Real interest rate reflects the opportunity cost of holding non-yielding gold.</p>
             </div>
-            <div class="chart-container">
-                <h3 id="chart2-title">High-Yield Credit Spread Trend (bps)</h3>
-                <canvas id="chart2"></canvas>
+            <div class="chart-box">
+                <div class="chart-header">
+                    <h3 class="chart-title chart-title-orange" id="chart2-title">High-Yield Credit Spread Trend (bps)</h3>
+                </div>
+                <div class="canvas-wrapper">
+                    <div id="chart2-msg" class="chart-empty-msg" style="display: none;">Insufficient historical data to render trend.</div>
+                    <canvas id="chart2"></canvas>
+                </div>
+                <p class="chart-info-text">Spikes in credit spreads often signal systemic stress where gold acts as a safe haven.</p>
+                   <section class="theory-section">
+            <div class="section-header">
+                <h2 id="theory-title">About This Model · 关于这个模型</h2>
             </div>
-        </section>
-
-        <section class="theory-section">
-            <h2 class="section-title" id="theory-title">About This Model · 关于这个模型</h2>
             
-            <div class="theory-card">
-                <h3 id="theory-intro-title">What This Model Does</h3>
-                <p id="theory-intro-content">This is a macroeconomic environment detector, not a price predictor. It answers one question: Is the current macro environment suitable for holding gold? The model monitors three structural conditions and outputs a signal — not a buy/sell recommendation, but an assessment of whether macro tailwinds or headwinds currently dominate.</p>
+            <div class="theory-intro">
+                <div class="intro-card">
+                    <h3 id="theory-intro-title">What This Model Does</h3>
+                    <p id="theory-intro-content">This is a macroeconomic environment detector, not a price predictor. It answers one question: Is the current macro environment suitable for holding gold? The model monitors three structural conditions and outputs a signal — not a buy/sell recommendation, but an assessment of whether macro tailwinds or headwinds currently dominate.</p>
+                </div>
             </div>
 
-            <div class="conditions-explainer">
-                <details class="detail-card">
+            <div class="conditions-explainer" style="margin-bottom: 48px;">
+                <details class="accordion-item blue">
                     <summary>
-                        <div class="summary-content">
-                            <span class="cond-title" id="c1-expl-title">Condition 1 · Real Interest Rates</span>
-                            <span class="cond-subtitle" id="c1-expl-sub">The most critical factor</span>
+                        <div class="summary-label">
+                            <span class="label-main" id="c1-expl-title">Condition 1 · Real Interest Rates</span>
+                            <span class="label-sub" id="c1-expl-sub">The most critical factor</span>
                         </div>
+                        <span class="arrow-icon">▼</span>
                     </summary>
-                    <div class="detail-body">
+                    <div class="accordion-content">
                         <p id="c1-expl-body1">Real interest rate = Nominal rate − Inflation expectations. When this number is negative or falling rapidly, the opportunity cost of holding gold disappears — cash and bonds lose real value, making gold relatively more attractive.</p>
-                        <p id="c1-expl-body2"><strong>Key insight:</strong> The direction of change matters more than the absolute level. A real rate falling from +2% toward 0% is often more powerful for gold than a rate already at -1% but stable.</p>
-                        <div class="range-box">
+                        <p id="c1-expl-body2">The direction of change matters more than the absolute level. A real rate falling from +2% toward 0% is often more powerful for gold than a rate already at -1% but stable.</p>
+                        <div class="range-table">
                             <strong id="c1-expl-range-title">Signal range:</strong><br>
                             <span id="c1-expl-range-list">
                             · Below 0%: Score 85–100 (strongly favorable)<br>
@@ -382,21 +591,22 @@
                             · Above +2%: Score 0–20 (strong headwind)
                             </span>
                         </div>
-                        <p class="watch-text" id="c1-expl-watch">Watch: 10-Year TIPS Yield (FRED: DFII10)</p>
+                        <a href="https://fred.stlouisfed.org/series/DFII10" target="_blank" class="accent-link" id="c1-expl-watch">Watch: 10-Year TIPS Yield (FRED: DFII10)</a>
                     </div>
                 </details>
 
-                <details class="detail-card">
+                <details class="accordion-item orange">
                     <summary>
-                        <div class="summary-content">
-                            <span class="cond-title" id="c2-expl-title">Condition 2 · Systemic Credit Stress</span>
-                            <span class="cond-subtitle" id="c2-expl-sub">Monetary order under pressure</span>
+                        <div class="summary-label">
+                            <span class="label-main" id="c2-expl-title">Condition 2 · Systemic Credit Stress</span>
+                            <span class="label-sub" id="c2-expl-sub">Monetary order under pressure</span>
                         </div>
+                        <span class="arrow-icon">▼</span>
                     </summary>
-                    <div class="detail-body">
+                    <div class="accordion-content">
                         <p id="c2-expl-body1">This condition looks for stress at the level of the monetary system itself — not short-term volatility, but structural threats: banking crises, sovereign debt risks, central bank pivots to massive easing, or credibility loss in reserve currencies.</p>
-                        <p id="c2-expl-body2"><strong>Important distinction:</strong> Geopolitical conflicts, individual defaults, or election uncertainty are NOT sufficient triggers. The condition requires systemic-level stress — when the monetary order itself is threatened.</p>
-                        <div class="range-box">
+                        <p id="c2-expl-body2">Geopolitical conflicts, individual defaults, or election uncertainty are NOT sufficient triggers. The condition requires systemic-level stress — when the monetary order itself is threatened.</p>
+                        <div class="range-table">
                             <strong id="c2-expl-range-title">Key indicators:</strong><br>
                             <span id="c2-expl-range-list">
                             · High-yield credit spread (BAMLH0A0HYM2): stress above 600bps<br>
@@ -407,14 +617,15 @@
                     </div>
                 </details>
 
-                <details class="detail-card">
+                <details class="accordion-item purple">
                     <summary>
-                        <div class="summary-content">
-                            <span class="cond-title" id="c3-expl-title">Condition 3 · CB Gold Buying</span>
-                            <span class="cond-subtitle" id="c3-expl-sub">The structural floor — added after 2022</span>
+                        <div class="summary-label">
+                            <span class="label-main" id="c3-expl-title">Condition 3 · CB Gold Buying</span>
+                            <span class="label-sub" id="c3-expl-sub">The structural floor — added after 2022</span>
                         </div>
+                        <span class="arrow-icon">▼</span>
                     </summary>
-                    <div class="detail-body">
+                    <div class="accordion-content">
                         <p id="c3-expl-body1">This condition was added to the original framework after the 2022 mechanism breakdown, when gold rose despite rising real rates — contradicting decades of historical correlation.</p>
                         <p id="c3-expl-body2">The cause: Following the freezing of Russia's foreign exchange reserves in 2022, central banks worldwide — especially in emerging markets — began structurally diversifying away from dollar assets into gold. Annual central bank gold purchases exceeded 1,000 tonnes for three consecutive years (2022–2024), double the prior decade's average.</p>
                         <p id="c3-expl-body3">These buyers are price-insensitive. They buy for strategic reserve diversification, not yield. This creates a persistent price floor that operates independently of real interest rates.</p>
@@ -423,15 +634,15 @@
                 </details>
             </div>
 
-            <div class="validation-section">
+            <div class="timeline-box">
                 <h3 id="hist-title">Historical Validation · 历史验证</h3>
-                <div class="timeline" id="timeline-container">
+                <div class="timeline-container" id="timeline-container">
                     <!-- Timeline items rendered via JS -->
                 </div>
             </div>
 
             <div class="limitation-box">
-                <h4 id="lim-title">Model Limitations · 重要局限</h4>
+                <h4 id="lim-title">⚠ Model Limitations · 重要局限</h4>
                 <ul id="lim-list">
                     <!-- Limitations items rendered via JS -->
                 </ul>
@@ -439,17 +650,16 @@
         </section>
 
         <footer>
-            <div class="disclaimer" id="disclaimer-text">
+            <div class="footer-disclaimer" id="disclaimer-text">
                 This tool provides macroeconomic environment analysis only. It does not constitute investment advice of any kind.
             </div>
-            <div style="margin-top: 20px;">
-                <a href="https://github.com/astonysh/GoldSignal" target="_blank" style="color: var(--accent-blue); text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            <div class="footer-actions">
+                <a href="https://github.com/astonysh/GoldSignal" target="_blank" class="footer-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                     <span id="contribute-text">Contribute on GitHub</span>
                 </a>
             </div>
         </footer>
-    </div>
 
     <script>
         const WORKER_URL = 'https://gold-signal-worker.astonysh5064.workers.dev';
@@ -522,7 +732,10 @@
                     STRUCTURAL_SUPPORT: { label: "STRUCTURAL SUPPORT", desc: "Central bank structural buying provides a floor despite macro headwinds." },
                     WATCH: { label: "WATCH", desc: "Mixed macro indicators. No clear directional edge in the current regime." },
                     AVOID: { label: "AVOID", desc: "Real rates elevated & credit risk low. Significant headwinds for gold prices." }
-                }
+                },
+                score: "Score",
+                chartMsg: "Insufficient historical data to render trend.",
+                tag: "Condition"
             },
             zh: {
                 title: "黄金宏观信号系统",
@@ -532,19 +745,19 @@
                 errorMsg: "无法连接到数据服务器，请检查网络。",
                 lastUpdated: "最近更新: ",
                 disclaimer: "本工具仅提供宏观环境数据分析，不构成任何投资建议。",
-                c1: "条件 1 · 实际利率",
+                c1: "实际利率 (Real Rate)",
                 c1Sub: "10年期 TIPS 收益率",
-                c2: "条件 2 · 信用压力",
+                c2: "信用压力 (Credit Stress)",
                 c2Sub: "高收益债利差",
-                c3: "条件 3 · 央行购金",
+                c3: "央行购金 (CB Buying)",
                 c3Sub: "结构性支撑信号",
                 extYield: "收益率 (%)",
                 extSpread: "利差 (bps)",
                 extDxy: "美元指数",
                 chart1: "10年期 TIPS 实际收益率趋势 (%)",
                 chart2: "高收益债利差趋势 (bps)",
-                contribute: "在 GitHub 上参与项目贡献",
-                theoryTitle: "关于这个模型 · 关于",
+                contribute: "在 GitHub 上参与贡献",
+                theoryTitle: "关于这个模型 · About This Model",
                 whatTitle: "这个模型是做什么的",
                 whatText: "这是一个宏观环境检测器，而非价格预测器。它回答一个问题：当前的宏观环境是否适合持有黄金？模型监测三个结构性条件并输出信号——不是买入/卖出建议，而是对宏观利好或利空当前是否占据主导地位的评估。",
                 c1Title: "条件 1 · 实际利率",
@@ -566,16 +779,16 @@
                 c3Body2: "原因：2022 年西方冻结外汇储备后，全球央行——尤其是新兴市场央行——开始结构性地去美元化并增持黄金。连续三年购金量超过 1000 吨。",
                 c3Body3: "这些买家对价格不敏感。他们的购金行为是出于战略性储备多元化，而非收益率。这创造了一个独立于实际利率的持久价格底部。",
                 c3Body4: "当该条件激活时，条件 1 的逆风会被部分抵消——黄金可能不会暴涨，但也不会崩盘。",
-                validationTitle: "历史验证 · 历史",
+                validationTitle: "历史验证 · History",
                 timeline: [
                     { date: "1972–1980", sig: "持有 · HOLD", class: "sig-hold", cond: "实际利率深度为负 + 布雷顿森林体系崩溃", res: "黄金：$35 → $675 (+938%)" },
                     { date: "1980–2001", sig: "回避 · AVOID", class: "sig-avoid", cond: "沃尔克将实际利率推高至 +5%，无信用压力", res: "黄金跌幅达 70%。避开黄金是正确的。" },
                     { date: "2001–2012", sig: "持有 · HOLD", class: "sig-hold", cond: "实际利率转为负数 + 2008 金融危机", res: "黄金：$272 → $1,650 (+506%)" },
                     { date: "2013–2018", sig: "回避 · AVOID", class: "sig-avoid", cond: "缩减恐慌、加息、无系统性压力", res: "黄金下跌 35%。避开黄金是正确的。" },
                     { date: "2019–2025", sig: "持有 · HOLD", class: "sig-hold", cond: "美联储转向 + 实际利率下降 + 央行结构性购金", res: "黄金：$1,300 → $4,600+ (+254%)" },
-                    { date: "2026 现在", sig: "回避 / 观望", class: "sig-avoid", cond: "实际利率 +2%，由于中东局势推高通胀，美联储维持现状。条件 3 提供底部但没有催化剂。", res: "金价从 $5,200 跌至 $4,600。模型在下跌前正确识别了阻力。" }
+                    { date: "2026 现在", sig: "回避 / 观望", class: "sig-avoid", cond: "实际利率 +2%，由于中东局势推高通胀，美联储维持现状。条件 3 提供底部 but 没有催化剂。", res: "金价从 $5,200 跌至 $4,600。模型在下跌前正确识别了阻力。" }
                 ],
-                limTitle: "模型局限 · 重要局限",
+                limTitle: "模型局限 · Important Notes",
                 limitations: [
                     "该模型以季度到几年的周期运行。50 年内仅产生约 5 次重大信号变化。不要用于短期交易决策。",
                     "模型识别的是宏观环境——而不是买入价格。HOLD 信号后，金价可能仍会经历 20-30% 的回调。",
@@ -587,49 +800,52 @@
                     STRUCTURAL_SUPPORT: { label: "结构性支撑", desc: "尽管宏观环境有阻力，但央行结构性需求提供下限支撑。" },
                     WATCH: { label: "观望 · WATCH", desc: "宏观信号发生分歧，当前环境下暂时没有明确的方向性优势。" },
                     AVOID: { label: "回避 · AVOID", desc: "实际利率高企且短期信用压力低，黄金面临较大的宏观逆风。" }
-                }
+                },
+                score: "分值",
+                chartMsg: "历史记录不足，暂无法渲染趋势图。",
+                tag: "条件"
             },
             tr: {
-                title: "Altın Makro Sinyal Sistemi",
-                subtitle: "Altın için makroekonomik ortam izleyici",
-                loading: "Küresel makro veriler senkronize ediliyor...",
+                title: "Gold Macro Signal",
+                subtitle: "Altın için makroekonomik izleyici",
+                loading: "Küresel veriler senkronize ediliyor...",
                 errorTitle: "Bağlantı Kesildi",
-                errorMsg: "Veri sunucusuna ulaşılamadı. Lütfen kontrol edin.",
+                errorMsg: "Sunucuya ulaşılamadı. Lütfen kontrol edin.",
                 lastUpdated: "Son Güncelleme: ",
-                disclaimer: "Bu araç yalnızca makroekonomik ortam analizi sağlar. Herhangi bir yatırım tavsiyesi teşkil etmez.",
-                c1: "Koşul 1 · Reel Faiz Oranı",
+                disclaimer: "Bu araç yalnızca makroekonomik ortam analizi sağlar. Yatırım tavsiyesi değildir.",
+                c1: "Reel Faiz (Real Rate)",
                 c1Sub: "10 Yıllık TIPS Getirisi",
-                c2: "Koşul 2 · Kredi Baskısı",
+                c2: "Kredi Baskısı (Credit Stress)",
                 c2Sub: "Yüksek Getirili Spread",
-                c3: "Koşul 3 · MB Altın Alımı",
+                c3: "MB Alımı (CB Buying)",
                 c3Sub: "Yapısal Destek",
                 extYield: "Getiri (%)",
                 extSpread: "Spread (bps)",
                 extDxy: "DXY Endeksi",
                 chart1: "10 Yıllık TIPS Reel Getiri Trendi (%)",
-                chart2: "Yüksek Getirili Kredi Spread Trendi (bps)",
+                chart2: "Yüksek Getirili Spread Trendi (bps)",
                 contribute: "GitHub'da katkıda bulunun",
-                theoryTitle: "Bu Model Hakkında · Teori",
+                theoryTitle: "Bu Model Hakkında · About",
                 whatTitle: "Bu Model Ne Yapar?",
-                whatText: "Bu bir makroekonomik ortam detektörüdür, bir fiyat tahmincisi değildir. Tek bir soruya cevap verir: Mevcut makro ortam altın tutmak için uygun mu? Model üç yapısal koşulu izler ve bir sinyal üretir; bu bir al/sat tavsiyesi değil, makro rüzgarların mı yoksa engellerin mi baskın olduğunun bir değerlendirmesidir.",
+                whatText: "Bu bir makroekonomik ortam detektörüdür, fiyat tahmincisi değildir. Mevcut makro ortam altın tutmak için uygun mu? Model üç yapısal koşulu izler ve bir sinyal üretir; makro rüzgarların mı yoksa engellerin mi baskın olduğunun bir değerlendirmesidir.",
                 c1Title: "Koşul 1 · Reel Faiz Oranları",
                 c1Sub: "En kritik faktör",
-                c1Body1: "Reel faiz oranı = Nominal faiz - Enflasyon beklentileri. Bu sayı negatif olduğunda veya hızla düştüğünde, altın tutmanın fırsat maliyeti ortadan kalkar; nakit ve tahviller gerçek değerini kaybeder, bu da altını nispeten daha cazip hale getirir.",
-                c1Body2: "Değişimin yönu, mutlak seviyeden daha önemlidir. +%2'den %0'a düşen bir reel faiz, zaten -%1'de olan ancak sabit kalan bir faizden altın için genellikle daha güçlü bir katalizördür.",
+                c1Body1: "Reel faiz oranı = Nominal faiz - Enflasyon beklentileri. Bu sayı negatif olduğunda, altın tutmanın fırsat maliyeti ortadan kalkar; nakit ve tahviller gerçek değerini kaybeder, bu da altını cazip hale getirir.",
+                c1Body2: "Değişimin yönu, mutlak seviyeden daha önemlidir. +%2'den %0'a düşen bir reel faiz, altın için genellikle daha güçlü bir katalizördür.",
                 c1RangeTitle: "Sinyal aralığı:",
                 c1RangeList: "· %0 altı: Skor 85–100 (güçlü elverişli)<br>· %0-1 arası: Skor 60–80 (nötr-pozitif)<br>· %1-2 arası: Skor 25–50 (engel)<br>· %2 üzeri: Skor 0-20 (güçlü engel)",
                 c1Watch: "İzle: 10 Yıllık TIPS Getirisi (FRED: DFII10)",
                 c2Title: "Koşul 2 · Sistemik Kredi Baskısı",
                 c2Sub: "Parasal düzen baskı altında",
-                c2Body1: "Bu koşul, parasal sistemin kendi seviyesindeki baskıyı arar; kısa vadeli oynaklığı değil, yapısal tehditleri: bankacılık krizleri, egemen borç riskleri veya rezerv para birimlerine olan güven kaybı.",
-                c2Body2: "Jeopolitik çatışmalar, bireysel temerrütler veya seçim belirsizliği yeterli tetikleyiciler DEĞİLDİR. Koşul, sistemik düzeyde stres gerektirir - parasal düzenin kendisi tehdit edildiğinde.",
+                c2Body1: "Sistemik tehditleri arar: bankacılık krizleri, egemen borç riskleri veya rezerv para birimlerine olan güven kaybı.",
+                c2Body2: "Jeopolitik çatışmalar yeterli değildir. Koşul, sistemik düzeyde stres gerektirir - parasal düzenin kendisi tehdit edildiğinde.",
                 c2RangeTitle: "Ana göstergeler:",
-                c2RangeList: "· Yüksek getirili kredi spreadi (600bps üzeri)<br>· Fed bilançosu genişlemesi (QE sinyali)<br>· Dolar endeksi yönü: zayıflık rezerv para birimi baskısını simgeler",
+                c2RangeList: "· Yüksek getirili kredi spreadi (600bps üzeri)<br>· Fed bilançosu genişlemesi (QE sinyali)<br>· Dolar endeksi yönü: zayıflık",
                 c3Title: "Koşul 3 · MB Yapısal Altın Alımı",
                 c3Sub: "Yapısal taban - 2022'den sonra eklendi",
-                c3Body1: "Bu koşul, reel faizlerin yükselmesine rağmen altının yükseldiği ve on yıllardır devam eden tarihsel korelasyonla çeliştiği 2022 mekanizma kırılmasından sonra çerçeveye eklendi.",
-                c3Body2: "Neden: 2022'de yabancı rezervlerin dondurulmasının ardından, dünya çapındaki merkez bankaları yapısal olarak dolar varlıklarından altın lehine çeşitlenmeye başladı. Alımlar üç yıl üst üste 1.000 tonu aştı.",
-                c3Body3: "Bu alıcılar fiyata duyarsızdır. Getiri için değil, stratejik rezerv çeşitlendirmesi için satın alırlar. Bu, reel faiz oranlarından bağımsız olarak çalışan kalıcı bir fiyat tabanı oluşturur.",
+                c3Body1: "Bu koşul, reel faizlerin yükselmesine rağmen altının yükseldiği 2022 mekanizma kırılmasından sonra eklendi.",
+                c3Body2: "Neden: 2022'de yabancı rezervlerin dondurulmasının ardından, merkez bankaları yapısal olarak altın lehine çeşitlenmeye başladı.",
+                c3Body3: "Bu alıcılar fiyata duyarsızdır, stratejik rezerv çeşitlendirmesi için satın alırlar. Bu, kalıcı bir fiyat tabanı oluşturur.",
                 c3Body4: "Bu koşul aktif olduğunda, Koşul 1 engelleri kısmen dengelenir - altın yükselmeyebilir, ancak çökmez de.",
                 validationTitle: "Tarihsel Doğrulama · Geçmiş",
                 timeline: [
@@ -652,7 +868,10 @@
                     STRUCTURAL_SUPPORT: { label: "YAPISAL DESTEK", desc: "Makro engellere rağmen merkez bankası alımları yapısal destek sağlıyor." },
                     WATCH: { label: "İZLE · WATCH", desc: "Karmaşık makro göstergeler. Mevcut rejimde net bir yön avantajı yok." },
                     AVOID: { label: "KAÇIN · AVOID", desc: "Reel faizler yüksek ve kredi riski düşük. Altın fiyatları için ciddi engeller mevcut." }
-                }
+                },
+                score: "Skor",
+                chartMsg: "Yeterli tarihsel veri yok.",
+                tag: "Koşul"
             }
         };
 
@@ -726,9 +945,14 @@
                 </div>
             `).join('');
 
-            document.getElementById('lim-title').innerText = t.limTitle;
-            const limList = document.getElementById('lim-list');
-            limList.innerHTML = t.limitations.map(lim => `<li>${lim}</li>`).join('');
+            // Update Scores Labels
+            ['c1', 'c2', 'c3'].forEach(id => {
+                document.getElementById(`tag-${id}`).innerText = `${t.tag} ${id.slice(1)}`;
+                document.getElementById(`lbl-score-${id}`).innerText = t.score;
+            });
+
+            document.getElementById('chart1-msg').innerText = t.chartMsg;
+            document.getElementById('chart2-msg').innerText = t.chartMsg;
 
             if (latestData) updateSignalAndScores(latestData);
         }
@@ -772,11 +996,11 @@
             document.getElementById('updated-at').innerText = `${t.lastUpdated}${data.date}`;
 
             // Scores & Bars
-            const updateC = (id, score, val) => {
+            const updateC = (id, score) => {
                 const bar = document.getElementById(`p-c${id}`);
                 bar.style.width = `${score}%`;
                 bar.style.backgroundColor = score <= 30 ? '#ef4444' : (score <= 60 ? '#facc15' : '#10b981');
-                document.getElementById(`val-c${id}`).innerText = score;
+                document.getElementById(`score-c${id}`).innerText = score;
             };
 
             updateC(1, data.condition1_score);
@@ -789,7 +1013,19 @@
         }
 
         function renderCharts(h) {
-            Chart.defaults.color = '#94a3b8';
+            const chart1Msg = document.getElementById('chart1-msg');
+            const chart2Msg = document.getElementById('chart2-msg');
+            
+            if (!h || h.length < 2) {
+                chart1Msg.style.display = 'flex';
+                chart2Msg.style.display = 'flex';
+                return;
+            } else {
+                chart1Msg.style.display = 'none';
+                chart2Msg.style.display = 'none';
+            }
+
+            Chart.defaults.color = '#8b949e';
             Chart.defaults.font.family = "'Inter', sans-serif";
             const sorted = h.sort((a,b) => new Date(a.date) - new Date(b.date));
             const labels = sorted.map(d => d.date);
@@ -800,7 +1036,7 @@
                 plugins: { legend: { display: false } },
                 scales: {
                     x: { display: false },
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, border: { display: false } }
+                    y: { grid: { color: 'rgba(255,255,255,0.03)' }, border: { display: false } }
                 }
             };
 
@@ -813,27 +1049,15 @@
                         data: sorted.map(d => d.tips_yield),
                         borderColor: '#3b82f6',
                         backgroundColor: (ctx) => {
-                            const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
-                            g.addColorStop(0, 'rgba(59, 130, 246, 0.2)');
+                            const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 220);
+                            g.addColorStop(0, 'rgba(59, 130, 246, 0.15)');
                             g.addColorStop(1, 'transparent');
                             return g;
                         },
                         fill: true, pointRadius: 0, borderWidth: 2, tension: 0.3
                     }]
                 },
-                options: commonOpts,
-                plugins: [{
-                    id: 'zero',
-                    afterDraw: c => {
-                        const {ctx, scales:{y}} = c;
-                        const y0 = y.getPixelForValue(0);
-                        if (y0 >= c.chartArea.top && y0 <= c.chartArea.bottom) {
-                            ctx.save(); ctx.beginPath(); ctx.setLineDash([6, 4]);
-                            ctx.moveTo(c.chartArea.left, y0); ctx.lineTo(c.chartArea.right, y0);
-                            ctx.strokeStyle = 'rgba(239, 68, 68, 0.6)'; ctx.stroke(); ctx.restore();
-                        }
-                    }
-                }]
+                options: commonOpts
             });
 
             // Chart 2
@@ -845,27 +1069,15 @@
                         data: sorted.map(d => d.hy_spread),
                         borderColor: '#f97316',
                         backgroundColor: (ctx) => {
-                            const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
-                            g.addColorStop(0, 'rgba(249, 115, 22, 0.2)');
+                            const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 220);
+                            g.addColorStop(0, 'rgba(249, 115, 22, 0.15)');
                             g.addColorStop(1, 'transparent');
                             return g;
                         },
                         fill: true, pointRadius: 0, borderWidth: 2, tension: 0.3
                     }]
                 },
-                options: commonOpts,
-                plugins: [{
-                    id: 'ref',
-                    afterDraw: c => {
-                        const {ctx, scales:{y}} = c;
-                        const y400 = y.getPixelForValue(400);
-                        if (y400 >= c.chartArea.top && y400 <= c.chartArea.bottom) {
-                            ctx.save(); ctx.beginPath(); ctx.setLineDash([6, 4]);
-                            ctx.moveTo(c.chartArea.left, y400); ctx.lineTo(c.chartArea.right, y400);
-                            ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)'; ctx.stroke(); ctx.restore();
-                        }
-                    }
-                }]
+                options: commonOpts
             });
         }
 
