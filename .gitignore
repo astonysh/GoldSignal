@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+.venv/
+
+# macOS
+.DS_Store
+
+# 本项目：每次运行自动生成，不需要纳入版本控制
+# result.json 可以选择提交（用于记录历史），此处保留
