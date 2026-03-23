@@ -78,7 +78,7 @@ GoldSignal/
 
 ## License
 
-MIT License — free to use, modify, and distribute.
+Apache License 2.0 — free to use, modify, and distribute.
 
 ---
 
@@ -131,7 +131,7 @@ Adim 4: Actions sekmesinden manuel olarak calistirin ve test edin.
 
 ## Lisans
 
-MIT Lisansi — ozgurce kullanin, degistirin ve dagatin.
+Apache Lisansı 2.0 — ozgurce kullanin, degistirin ve dagatin.
 
 ---
 
@@ -198,4 +198,4 @@ python3 scripts/fetch_and_score.py
 
 ## 许可证
 
-MIT License — 自由使用、修改和分发。
+Apache License 2.0 — 自由使用、修改和分发。
