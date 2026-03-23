@@ -3,22 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gold Macro Signal · 黄金宏观信号系统</title>
+    <title>Gold Macro Signal · 黄金宏观信号系统 · Altın Makro Sinyal</title>
     <meta name="description" content="Macroeconomic environment monitor for gold investment decisions.">
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    
     <style>
         :root {
-            --bg-color: #0f0f0f;
-            --card-bg: #1a1a1a;
+            --bg-color: #050505;
+            --card-bg: rgba(26, 26, 26, 0.6);
+            --card-border: rgba(255, 255, 255, 0.1);
             --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
+            --text-secondary: #94a3b8;
             --accent-blue: #3b82f6;
             --accent-orange: #f97316;
             --success: #10b981;
             --success-light: #34d399;
             --warning: #facc15;
             --danger: #ef4444;
-            --border-radius: 12px;
+            --border-radius: 16px;
+            --glass-blur: 12px;
         }
 
         * {
@@ -29,16 +38,18 @@
 
         body {
             background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% -20%, #1e293b 0%, #050505 80%);
             color: var(--text-primary);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            padding-bottom: 40px;
+            font-family: 'Inter', -apple-system, sans-serif;
+            line-height: 1.5;
+            padding-bottom: 60px;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px;
         }
 
         /* Loading & Error States */
@@ -51,16 +62,16 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.5s ease;
         }
-        #error-overlay { display: none; color: var(--danger); text-align: center; padding: 20px; }
+        #error-overlay { display: none; color: var(--danger); text-align: center; padding: 40px; }
         .spinner {
-            width: 40px; height: 40px;
-            border: 4px solid rgba(255,255,255,0.1);
-            border-top: 4px solid var(--accent-blue);
+            width: 50px; height: 50px;
+            border: 3px solid rgba(255,255,255,0.05);
+            border-top: 3px solid var(--accent-blue);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            animation: spin 0.8s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            margin-bottom: 24px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -68,403 +79,485 @@
         header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 20px;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .header-left h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-        .header-left p { color: var(--text-secondary); font-size: 14px; }
-        .header-right { text-align: right; color: var(--text-secondary); font-size: 13px; }
+        .brand h1 { font-size: 28px; font-weight: 800; letter-spacing: -1px; background: linear-gradient(to bottom right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .brand p { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
+        
+        .header-controls { display: flex; align-items: center; gap: 20px; }
+        .last-updated { text-align: right; color: var(--text-secondary); font-size: 13px; font-variant-numeric: tabular-nums; }
+        
+        /* Language Switcher */
+        .lang-switcher {
+            display: flex;
+            background: rgba(255,255,255,0.05);
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .lang-btn {
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .lang-btn.active {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
 
-        /* Main Signal Card */
+        /* Main Signal Card (Glass) */
         .signal-card {
-            border-radius: var(--border-radius);
-            padding: 40px;
-            margin-bottom: 30px;
+            border-radius: 24px;
+            padding: 60px 40px;
+            margin-bottom: 40px;
             text-align: center;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .signal-card::before {
+        .signal-card::after {
             content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%);
             pointer-events: none;
         }
-        .signal-text { font-size: 36px; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        .signal-desc { font-size: 16px; opacity: 0.9; font-weight: 500; }
+        .signal-label { font-size: 48px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 2px; }
+        .signal-desc { font-size: 18px; opacity: 0.9; font-weight: 500; max-width: 600px; }
 
         /* Condition Cards Grid */
         .conditions-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 24px;
+            margin-bottom: 40px;
         }
         .card {
             background-color: var(--card-bg);
+            backdrop-filter: blur(var(--glass-blur));
             border-radius: var(--border-radius);
-            padding: 24px;
-            border: 1px solid #2a2a2a;
-            transition: transform 0.2s ease;
+            padding: 28px;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
-        .card:hover { transform: translateY(-4px); }
-        .card-header { margin-bottom: 20px; }
-        .card-title { font-size: 12px; text-transform: uppercase; color: var(--text-secondary); font-weight: 600; letter-spacing: 1px; }
-        .card-subtitle { font-size: 14px; color: var(--text-primary); margin-top: 4px; }
+        .card:hover { 
+            transform: translateY(-6px); 
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .card-title { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; letter-spacing: 1.5px; margin-bottom: 6px; }
+        .card-subtitle { font-size: 15px; color: var(--text-primary); font-weight: 600; }
         
-        /* Progress Bar */
-        .progress-container { height: 8px; background: #333; border-radius: 4px; margin: 15px 0; overflow: hidden; }
-        .progress-bar { height: 100%; width: 0%; transition: width 1s ease-out, background-color 0.3s; }
+        .progress-container { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; margin: 24px 0; overflow: hidden; }
+        .progress-bar { height: 100%; width: 0%; transition: width 1.2s cubic-bezier(0.65, 0, 0.35, 1), background-color 0.4s; }
         
-        .card-value { font-size: 32px; font-weight: 700; margin-top: 10px; }
-        .card-extra { font-size: 14px; color: var(--text-secondary); margin-top: 5px; }
+        .card-footer { display: flex; justify-content: space-between; align-items: baseline; }
+        .card-value { font-size: 36px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -1px; }
+        .card-extra { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
 
         /* Charts Section */
         .charts-section {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 60px;
         }
         .chart-container {
             background-color: var(--card-bg);
+            backdrop-filter: blur(var(--glass-blur));
             border-radius: var(--border-radius);
-            padding: 24px;
-            border: 1px solid #2a2a2a;
-            height: 350px;
-            position: relative;
+            padding: 30px;
+            border: 1px solid var(--card-border);
+            height: 400px;
         }
-        .chart-container h3 { font-size: 16px; margin-bottom: 20px; color: var(--text-secondary); font-weight: 600; }
+        .chart-container h3 { font-size: 15px; margin-bottom: 24px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 30px 0;
-            border-top: 1px solid #222;
+            padding: 40px 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
-        .disclaimer { font-size: 12px; color: #555; max-width: 600px; margin: 0 auto; }
+        .disclaimer { font-size: 13px; color: #64748b; max-width: 700px; margin: 0 auto; line-height: 1.8; }
 
-        /* Responsive */
+        /* Signal Variants */
+        .sig-HOLD { background-color: #065f46; color: #ecfdf5; box-shadow: 0 0 50px rgba(16, 185, 129, 0.2); }
+        .sig-STRUCTURAL_SUPPORT { background-color: #064e3b; color: #d1fae5; box-shadow: 0 0 50px rgba(52, 211, 153, 0.15); }
+        .sig-WATCH { background-color: #78350f; color: #fef3c7; box-shadow: 0 0 50px rgba(250, 204, 21, 0.15); }
+        .sig-AVOID { background-color: #7f1d1d; color: #fee2e2; box-shadow: 0 0 50px rgba(239, 68, 68, 0.2); }
+
+        @media (max-width: 900px) {
+            .charts-section { grid-template-columns: 1fr; }
+        }
         @media (max-width: 768px) {
-            .header-right { display: none; }
+            header { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .header-controls { width: 100%; justify-content: space-between; }
             .conditions-grid { grid-template-columns: 1fr; }
-            .signal-text { font-size: 28px; }
-            header { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .chart-container { height: 300px; }
+            .signal-card { padding: 40px 24px; }
+            .signal-label { font-size: 32px; }
+            .signal-desc { font-size: 15px; }
         }
-
-        /* Dynamic Signal Classes */
-        .signal-HOLD { background-color: var(--success); color: white; }
-        .signal-STRUCTURAL_SUPPORT { background-color: var(--success-light); color: #064e3b; }
-        .signal-WATCH { background-color: var(--warning); color: #854d0e; }
-        .signal-AVOID { background-color: var(--danger); color: white; }
     </style>
 </head>
 <body>
 
     <div id="loading-overlay">
         <div class="spinner"></div>
-        <p>Loading market data...</p>
+        <p id="loading-text">Synchronizing Global Macro Data...</p>
     </div>
 
     <div id="error-overlay">
-        <h2>⚠️ Unable to connect</h2>
-        <p id="error-message">Failed to fetch the latest signals. Please try again later.</p>
-        <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #333; color: white; border: none; border-radius: 6px; cursor: pointer;">Retry</button>
+        <h2 id="error-title">⚠️ Connection Interrupted</h2>
+        <p id="error-msg">Telemetry offline. Could not reach the signal worker.</p>
+        <button onclick="location.reload()" style="margin-top: 24px; padding: 12px 28px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; cursor: pointer; font-weight: 600; transition: all 0.2s;">Initialize Reconnect</button>
     </div>
 
     <div class="container">
         <header>
-            <div class="header-left">
-                <h1>Gold Macro Signal</h1>
-                <p>Macroeconomic environment monitor for gold</p>
+            <div class="brand">
+                <h1 id="title-text">Gold Macro Signal</h1>
+                <p id="subtitle-text">Macroeconomic environment monitor for gold</p>
             </div>
-            <div class="header-right">
-                <span id="last-updated">Last updated: --</span>
+            <div class="header-controls">
+                <div class="lang-switcher">
+                    <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+                    <button class="lang-btn" onclick="setLanguage('zh')">中文</button>
+                    <button class="lang-btn" onclick="setLanguage('tr')">TR</button>
+                </div>
+                <div class="last-updated" id="updated-at">--</div>
             </div>
         </header>
 
-        <section id="signal-section">
+        <section>
             <div id="main-signal" class="signal-card">
-                <div class="signal-text" id="signal-label">--</div>
-                <div class="signal-desc" id="signal-desc">--</div>
+                <div class="signal-label" id="signal-val">--</div>
+                <div class="signal-desc" id="signal-info">--</div>
             </div>
         </section>
 
         <section class="conditions-grid">
-            <!-- Condition 1 -->
+            <!-- C1 -->
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Condition 1 · Real Interest Rate</div>
-                    <div class="card-subtitle">10-Year TIPS Yield</div>
+                <div class="card-title" id="t-c1">Condition 1 · Real Interest Rate</div>
+                <div class="card-subtitle" id="st-c1">10-Year TIPS Yield</div>
+                <div class="progress-container"><div id="p-c1" class="progress-bar"></div></div>
+                <div class="card-footer">
+                    <div class="card-value" id="val-c1">--</div>
+                    <div class="card-extra" id="ext-c1">Yield (%)</div>
                 </div>
-                <div class="progress-container">
-                    <div id="pb1" class="progress-bar"></div>
-                </div>
-                <div class="card-value" id="val1">--</div>
-                <div class="card-extra" id="extra1">Current Yield</div>
             </div>
 
-            <!-- Condition 2 -->
+            <!-- C2 -->
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Condition 2 · Credit Stress</div>
-                    <div class="card-subtitle">High-Yield Spread</div>
+                <div class="card-title" id="t-c2">Condition 2 · Credit Stress</div>
+                <div class="card-subtitle" id="st-c2">High-Yield Spread</div>
+                <div class="progress-container"><div id="p-c2" class="progress-bar"></div></div>
+                <div class="card-footer">
+                    <div class="card-value" id="val-c2">--</div>
+                    <div class="card-extra" id="ext-c2">Spread (bps)</div>
                 </div>
-                <div class="progress-container">
-                    <div id="pb2" class="progress-bar"></div>
-                </div>
-                <div class="card-value" id="val2">--</div>
-                <div class="card-extra" id="extra2">Current Spread</div>
             </div>
 
-            <!-- Condition 3 -->
+            <!-- C3 -->
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Condition 3 · CB Gold Buying</div>
-                    <div class="card-subtitle">Structural Support</div>
+                <div class="card-title" id="t-c3">Condition 3 · CB Gold Buying</div>
+                <div class="card-subtitle" id="st-c3">Structural Support</div>
+                <div class="progress-container"><div id="p-c3" class="progress-bar"></div></div>
+                <div class="card-footer">
+                    <div class="card-value" id="val-c3">--</div>
+                    <div class="card-extra" id="ext-c3">DXY Index</div>
                 </div>
-                <div class="progress-container">
-                    <div id="pb3" class="progress-bar"></div>
-                </div>
-                <div class="card-value" id="val3">--</div>
-                <div class="card-extra" id="extra3">DXY Index</div>
             </div>
         </section>
 
         <section class="charts-section">
             <div class="chart-container">
-                <h3>10-Year TIPS Real Yield (%)</h3>
-                <canvas id="tipsChart"></canvas>
+                <h3 id="chart1-title">10-Year TIPS Real Yield Trend (%)</h3>
+                <canvas id="chart1"></canvas>
             </div>
             <div class="chart-container">
-                <h3>High-Yield Credit Spread (bps)</h3>
-                <canvas id="spreadChart"></canvas>
+                <h3 id="chart2-title">High-Yield Credit Spread Trend (bps)</h3>
+                <canvas id="chart2"></canvas>
             </div>
         </section>
 
         <footer>
-            <p class="disclaimer">
-                This tool provides macroeconomic environment analysis only. It does not constitute investment advice of any kind.<br>
-                本工具仅提供宏观环境数据分析，不构成任何投资建议。
-            </p>
+            <div class="disclaimer" id="disclaimer-text">
+                This tool provides macroeconomic environment analysis only. It does not constitute investment advice of any kind.
+            </div>
         </footer>
     </div>
 
     <script>
         const WORKER_URL = 'https://gold-signal-worker.astonysh5064.workers.dev';
+        
+        let currentLang = 'en';
+        let latestData = null;
+        let historyData = null;
 
-        const SIGNAL_MAP = {
-            'HOLD': {
-                label: 'HOLD · 持有',
-                desc: 'Conditions 1 & 2 favorable for gold'
+        const I18N = {
+            en: {
+                title: "Gold Macro Signal",
+                subtitle: "Macroeconomic environment monitor for gold",
+                loading: "Synchronizing Global Macro Data...",
+                errorTitle: "Connection Interrupted",
+                errorMsg: "Telemetry offline. Could not reach the signal worker.",
+                lastUpdated: "Last Entry: ",
+                disclaimer: "This tool provides macroeconomic environment analysis only. It does not constitute investment advice of any kind.",
+                c1: "Condition 1 · Real Interest Rate",
+                c1Sub: "10-Year TIPS Yield",
+                c2: "Condition 2 · Credit Stress",
+                c2Sub: "High-Yield Spread",
+                c3: "Condition 3 · CB Gold Buying",
+                c3Sub: "Structural Support",
+                extYield: "Yield (%)",
+                extSpread: "Spread (bps)",
+                extDxy: "DXY Index",
+                chart1: "10-Year TIPS Real Yield Trend (%)",
+                chart2: "High-Yield Credit Spread Trend (bps)",
+                signals: {
+                    HOLD: { label: "HOLD", desc: "Real rates low & credit stress contained. Environment favorable for gold." },
+                    STRUCTURAL_SUPPORT: { label: "STRUCTURAL SUPPORT", desc: "Central bank structural buying provides a floor despite macro headwinds." },
+                    WATCH: { label: "WATCH", desc: "Mixed macro indicators. No clear directional edge in the current regime." },
+                    AVOID: { label: "AVOID", desc: "Real rates elevated & credit risk low. Significant headwinds for gold prices." }
+                }
             },
-            'STRUCTURAL_SUPPORT': {
-                label: 'STRUCTURAL SUPPORT · 结构性支撑',
-                desc: 'Central bank buying provides structural floor'
+            zh: {
+                title: "黄金宏观信号系统",
+                subtitle: "针对黄金投资的宏观环境监测",
+                loading: "正在同步全球宏观数据...",
+                errorTitle: "连接中断",
+                errorMsg: "无法连接到数据服务器，请检查网络。",
+                lastUpdated: "最近更新: ",
+                disclaimer: "本工具仅提供宏观环境数据分析，不构成任何投资建议。",
+                c1: "条件 1 · 实际利率",
+                c1Sub: "10年期 TIPS 收益率",
+                c2: "条件 2 · 信用压力",
+                c2Sub: "高收益债利差",
+                c3: "条件 3 · 央行购金",
+                c3Sub: "结构性支撑信号",
+                extYield: "收益率 (%)",
+                extSpread: "利差 (bps)",
+                extDxy: "美元指数",
+                chart1: "10年期 TIPS 实际收益率趋势 (%)",
+                chart2: "高收益债利差趋势 (bps)",
+                signals: {
+                    HOLD: { label: "持有 · HOLD", desc: "实际利率低且信用风险可控，宏观环境对金价有利。" },
+                    STRUCTURAL_SUPPORT: { label: "结构性支撑", desc: "尽管宏观环境有阻力，但央行结构性需求提供下限支撑。" },
+                    WATCH: { label: "观望 · WATCH", desc: "宏观信号发生分歧，当前环境下暂时没有明确的方向性优势。" },
+                    AVOID: { label: "回避 · AVOID", desc: "实际利率高企且短期信用压力低，黄金面临较大的宏观逆风。" }
+                }
             },
-            'WATCH': {
-                label: 'WATCH · 观望',
-                desc: 'Mixed signals — no clear directional edge'
-            },
-            'AVOID': {
-                label: 'AVOID · 回避',
-                desc: 'Real rates elevated, credit stress low'
+            tr: {
+                title: "Altın Makro Sinyal Sistemi",
+                subtitle: "Altın için makroekonomik ortam izleyici",
+                loading: "Küresel makro veriler senkronize ediliyor...",
+                errorTitle: "Bağlantı Kesildi",
+                errorMsg: "Veri sunucusuna ulaşılamadı. Lütfen kontrol edin.",
+                lastUpdated: "Son Güncelleme: ",
+                disclaimer: "Bu araç yalnızca makroekonomik ortam analizi sağlar. Herhangi bir yatırım tavsiyesi teşkil etmez.",
+                c1: "Koşul 1 · Reel Faiz Oranı",
+                c1Sub: "10 Yıllık TIPS Getirisi",
+                c2: "Koşul 2 · Kredi Baskısı",
+                c2Sub: "Yüksek Getirili Spread",
+                c3: "Koşul 3 · MB Altın Alımı",
+                c3Sub: "Yapısal Destek",
+                extYield: "Getiri (%)",
+                extSpread: "Spread (bps)",
+                extDxy: "DXY Endeksi",
+                chart1: "10 Yıllık TIPS Reel Getiri Trendi (%)",
+                chart2: "Yüksek Getirili Kredi Spread Trendi (bps)",
+                signals: {
+                    HOLD: { label: "TUT · HOLD", desc: "Reel faizler düşük ve kredi riski kontrol altında. Ortam altın için elverişli." },
+                    STRUCTURAL_SUPPORT: { label: "YAPISAL DESTEK", desc: "Makro engellere rağmen merkez bankası alımları yapısal destek sağlıyor." },
+                    WATCH: { label: "İZLE · WATCH", desc: "Karmaşık makro göstergeler. Mevcut rejimde net bir yön avantajı yok." },
+                    AVOID: { label: "KAÇIN · AVOID", desc: "Reel faizler yüksek ve kredi riski düşük. Altın fiyatları için ciddi engeller mevcut." }
+                }
             }
         };
 
-        function getProgressColor(score) {
-            if (score <= 30) return '#ef4444'; // Red
-            if (score <= 60) return '#facc15'; // Yellow
-            return '#10b981'; // Green
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText.toLowerCase() === lang || (btn.innerText === '中文' && lang === 'zh'));
+            });
+            
+            const t = I18N[lang];
+            document.getElementById('title-text').innerText = t.title;
+            document.getElementById('subtitle-text').innerText = t.subtitle;
+            document.getElementById('loading-text').innerText = t.loading;
+            document.getElementById('error-title').innerText = t.errorTitle;
+            document.getElementById('error-msg').innerText = t.errorMsg;
+            document.getElementById('disclaimer-text').innerText = t.disclaimer;
+            
+            document.getElementById('t-c1').innerText = t.c1;
+            document.getElementById('st-c1').innerText = t.c1Sub;
+            document.getElementById('t-c2').innerText = t.c2;
+            document.getElementById('st-c2').innerText = t.c2Sub;
+            document.getElementById('t-c3').innerText = t.c3;
+            document.getElementById('st-c3').innerText = t.c3Sub;
+            
+            document.getElementById('ext-c1').innerText = t.extYield;
+            document.getElementById('ext-c2').innerText = t.extSpread;
+            document.getElementById('ext-c3').innerText = t.extDxy;
+            
+            document.getElementById('chart1-title').innerText = t.chart1;
+            document.getElementById('chart2-title').innerText = t.chart2;
+
+            if (latestData) updateSignalAndScores(latestData);
         }
 
-        async function fetchData() {
+        async function init() {
             try {
-                const [latestRes, historyRes] = await Promise.all([
+                const [lRes, hRes] = await Promise.all([
                     fetch(`${WORKER_URL}/api/latest`),
                     fetch(`${WORKER_URL}/api/scores`)
                 ]);
+                const lJson = await lRes.json();
+                const hJson = await hRes.json();
 
-                const latest = await latestRes.json();
-                const history = await historyRes.json();
+                if (!lJson.success || !hJson.success) throw new Error("API logical failure");
 
-                if (!latest.success || !history.success) {
-                    throw new Error('API returned success=false');
-                }
+                latestData = lJson.data;
+                historyData = hJson.data;
 
-                renderDashboard(latest.data);
-                renderCharts(history.data);
+                updateSignalAndScores(latestData);
+                renderCharts(historyData);
+                setLanguage(currentLang);
 
-                // Hide loading
                 document.getElementById('loading-overlay').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loading-overlay').style.display = 'none';
-                }, 300);
-
-            } catch (err) {
-                console.error('Fetch error:', err);
+                setTimeout(() => document.getElementById('loading-overlay').style.display = 'none', 500);
+            } catch (e) {
+                console.error(e);
                 document.getElementById('loading-overlay').style.display = 'none';
                 document.getElementById('error-overlay').style.display = 'flex';
-                document.getElementById('error-message').innerText = 'System error: ' + err.message;
             }
         }
 
-        function renderDashboard(data) {
-            // Header
-            document.getElementById('last-updated').innerText = `Last updated: ${data.date}`;
-
-            // Main Signal
-            const signal = data.overall_signal;
-            const config = SIGNAL_MAP[signal] || { label: signal, desc: '' };
-            const mainSignalCard = document.getElementById('main-signal');
+        function updateSignalAndScores(data) {
+            const t = I18N[currentLang];
+            const sig = data.overall_signal;
+            const config = t.signals[sig] || { label: sig, desc: "" };
             
-            mainSignalCard.className = `signal-card signal-${signal}`;
-            document.getElementById('signal-label').innerText = config.label;
-            document.getElementById('signal-desc').innerText = config.desc;
+            const card = document.getElementById('main-signal');
+            card.className = `signal-card sig-${sig}`;
+            document.getElementById('signal-val').innerText = config.label;
+            document.getElementById('signal-info').innerText = config.desc;
+            document.getElementById('updated-at').innerText = `${t.lastUpdated}${data.date}`;
 
-            // Condition 1
-            const score1 = data.condition1_score;
-            const pb1 = document.getElementById('pb1');
-            pb1.style.width = `${score1}%`;
-            pb1.style.backgroundColor = getProgressColor(score1);
-            document.getElementById('val1').innerText = score1;
-            document.getElementById('extra1').innerText = `${data.tips_yield > 0 ? '+' : ''}${data.tips_yield}%`;
+            // Scores & Bars
+            const updateC = (id, score, val) => {
+                const bar = document.getElementById(`p-c${id}`);
+                bar.style.width = `${score}%`;
+                bar.style.backgroundColor = score <= 30 ? '#ef4444' : (score <= 60 ? '#facc15' : '#10b981');
+                document.getElementById(`val-c${id}`).innerText = score;
+            };
 
-            // Condition 2
-            const score2 = data.condition2_score;
-            const pb2 = document.getElementById('pb2');
-            pb2.style.width = `${score2}%`;
-            pb2.style.backgroundColor = getProgressColor(score2);
-            document.getElementById('val2').innerText = score2;
-            document.getElementById('extra2').innerText = `${data.hy_spread} bps`;
+            updateC(1, data.condition1_score);
+            updateC(2, data.condition2_score);
+            updateC(3, data.condition3_score);
 
-            // Condition 3
-            const score3 = data.condition3_score;
-            const pb3 = document.getElementById('pb3');
-            pb3.style.width = `${score3}%`;
-            pb3.style.backgroundColor = getProgressColor(score3);
-            document.getElementById('val3').innerText = score3;
-            document.getElementById('extra3').innerText = `DXY ${data.dollar_index}`;
+            document.getElementById('val-c1').innerText = (data.tips_yield > 0 ? '+' : '') + data.tips_yield.toFixed(2);
+            document.getElementById('val-c2').innerText = data.hy_spread;
+            document.getElementById('val-c3').innerText = data.dollar_index.toFixed(1);
         }
 
-        function renderCharts(historyData) {
-            // Sort history by date just in case
-            const sorted = historyData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        function renderCharts(h) {
+            Chart.defaults.color = '#94a3b8';
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            const sorted = h.sort((a,b) => new Date(a.date) - new Date(b.date));
             const labels = sorted.map(d => d.date);
 
-            // TIPS Chart
-            new Chart(document.getElementById('tipsChart'), {
+            const commonOpts = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { display: false },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, border: { display: false } }
+                }
+            };
+
+            // Chart 1
+            new Chart(document.getElementById('chart1'), {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels,
                     datasets: [{
-                        label: '10Y TIPS Yield (%)',
                         data: sorted.map(d => d.tips_yield),
                         borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        pointRadius: 0,
-                        tension: 0.2
+                        backgroundColor: (ctx) => {
+                            const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
+                            g.addColorStop(0, 'rgba(59, 130, 246, 0.2)');
+                            g.addColorStop(1, 'transparent');
+                            return g;
+                        },
+                        fill: true, pointRadius: 0, borderWidth: 2, tension: 0.3
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { display: false },
-                        y: { 
-                            grid: { color: '#333' },
-                            ticks: { color: '#888' }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        annotation: {
-                            // Handled by chartjs-plugin-annotation if included, 
-                            // but we'll do a simple red line via a second dataset or manual plugin
-                        }
-                    }
-                },
+                options: commonOpts,
                 plugins: [{
-                    id: 'zeroLine',
-                    afterDraw: (chart) => {
-                        const {ctx, scales: {y}} = chart;
-                        const zeroY = y.getPixelForValue(0);
-                        if (zeroY >= chart.chartArea.top && zeroY <= chart.chartArea.bottom) {
-                            ctx.save();
-                            ctx.beginPath();
-                            ctx.setLineDash([5, 5]);
-                            ctx.moveTo(chart.chartArea.left, zeroY);
-                            ctx.lineTo(chart.chartArea.right, zeroY);
-                            ctx.lineWidth = 1;
-                            ctx.strokeStyle = '#ef4444';
-                            ctx.stroke();
-                            ctx.restore();
+                    id: 'zero',
+                    afterDraw: c => {
+                        const {ctx, scales:{y}} = c;
+                        const y0 = y.getPixelForValue(0);
+                        if (y0 >= c.chartArea.top && y0 <= c.chartArea.bottom) {
+                            ctx.save(); ctx.beginPath(); ctx.setLineDash([6, 4]);
+                            ctx.moveTo(c.chartArea.left, y0); ctx.lineTo(c.chartArea.right, y0);
+                            ctx.strokeStyle = 'rgba(239, 68, 68, 0.6)'; ctx.stroke(); ctx.restore();
                         }
                     }
                 }]
             });
 
-            // Spread Chart
-            new Chart(document.getElementById('spreadChart'), {
+            // Chart 2
+            new Chart(document.getElementById('chart2'), {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels,
                     datasets: [{
-                        label: 'HY Spread (bps)',
                         data: sorted.map(d => d.hy_spread),
                         borderColor: '#f97316',
-                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        pointRadius: 0,
-                        tension: 0.2
+                        backgroundColor: (ctx) => {
+                            const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
+                            g.addColorStop(0, 'rgba(249, 115, 22, 0.2)');
+                            g.addColorStop(1, 'transparent');
+                            return g;
+                        },
+                        fill: true, pointRadius: 0, borderWidth: 2, tension: 0.3
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { display: false },
-                        y: { 
-                            grid: { color: '#333' },
-                            ticks: { color: '#888' }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false }
-                    }
-                },
+                options: commonOpts,
                 plugins: [{
-                    id: 'thresholdLine',
-                    afterDraw: (chart) => {
-                        const {ctx, scales: {y}} = chart;
-                        const thresholdY = y.getPixelForValue(400);
-                        if (thresholdY >= chart.chartArea.top && thresholdY <= chart.chartArea.bottom) {
-                            ctx.save();
-                            ctx.beginPath();
-                            ctx.setLineDash([5, 5]);
-                            ctx.moveTo(chart.chartArea.left, thresholdY);
-                            ctx.lineTo(chart.chartArea.right, thresholdY);
-                            ctx.lineWidth = 1;
-                            ctx.strokeStyle = '#ef4444';
-                            ctx.stroke();
-                            ctx.restore();
+                    id: 'ref',
+                    afterDraw: c => {
+                        const {ctx, scales:{y}} = c;
+                        const y400 = y.getPixelForValue(400);
+                        if (y400 >= c.chartArea.top && y400 <= c.chartArea.bottom) {
+                            ctx.save(); ctx.beginPath(); ctx.setLineDash([6, 4]);
+                            ctx.moveTo(c.chartArea.left, y400); ctx.lineTo(c.chartArea.right, y400);
+                            ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)'; ctx.stroke(); ctx.restore();
                         }
                     }
                 }]
             });
         }
 
-        // Initialize
-        fetchData();
+        init();
     </script>
 </body>
 </html>
