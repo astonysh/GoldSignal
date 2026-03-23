@@ -355,50 +355,54 @@
         </section>
 
         <section class="theory-section">
-            <h2 class="section-title">About This Model · 关于这个模型</h2>
+            <h2 class="section-title" id="theory-title">About This Model · 关于这个模型</h2>
             
             <div class="theory-card">
-                <h3>What This Model Does</h3>
-                <p>This is a macroeconomic environment detector, not a price predictor. It answers one question: Is the current macro environment suitable for holding gold? The model monitors three structural conditions and outputs a signal — not a buy/sell recommendation, but an assessment of whether macro tailwinds or headwinds currently dominate.</p>
+                <h3 id="theory-intro-title">What This Model Does</h3>
+                <p id="theory-intro-content">This is a macroeconomic environment detector, not a price predictor. It answers one question: Is the current macro environment suitable for holding gold? The model monitors three structural conditions and outputs a signal — not a buy/sell recommendation, but an assessment of whether macro tailwinds or headwinds currently dominate.</p>
             </div>
 
             <div class="conditions-explainer">
                 <details class="detail-card">
                     <summary>
                         <div class="summary-content">
-                            <span class="cond-title">Condition 1 · Real Interest Rates</span>
-                            <span class="cond-subtitle">The most critical factor</span>
+                            <span class="cond-title" id="c1-expl-title">Condition 1 · Real Interest Rates</span>
+                            <span class="cond-subtitle" id="c1-expl-sub">The most critical factor</span>
                         </div>
                     </summary>
                     <div class="detail-body">
-                        <p>Real interest rate = Nominal rate − Inflation expectations. When this number is negative or falling rapidly, the opportunity cost of holding gold disappears — cash and bonds lose real value, making gold relatively more attractive.</p>
-                        <p><strong>Key insight:</strong> The direction of change matters more than the absolute level. A real rate falling from +2% toward 0% is often more powerful for gold than a rate already at -1% but stable.</p>
+                        <p id="c1-expl-body1">Real interest rate = Nominal rate − Inflation expectations. When this number is negative or falling rapidly, the opportunity cost of holding gold disappears — cash and bonds lose real value, making gold relatively more attractive.</p>
+                        <p id="c1-expl-body2"><strong>Key insight:</strong> The direction of change matters more than the absolute level. A real rate falling from +2% toward 0% is often more powerful for gold than a rate already at -1% but stable.</p>
                         <div class="range-box">
-                            <strong>Signal range:</strong><br>
+                            <strong id="c1-expl-range-title">Signal range:</strong><br>
+                            <span id="c1-expl-range-list">
                             · Below 0%: Score 85–100 (strongly favorable)<br>
                             · 0% to +1%: Score 60–80 (neutral to positive)<br>
                             · +1% to +2%: Score 25–50 (headwind)<br>
                             · Above +2%: Score 0–20 (strong headwind)
+                            </span>
                         </div>
-                        <p class="watch-text">Watch: 10-Year TIPS Yield (FRED: DFII10)</p>
+                        <p class="watch-text" id="c1-expl-watch">Watch: 10-Year TIPS Yield (FRED: DFII10)</p>
                     </div>
                 </details>
 
                 <details class="detail-card">
                     <summary>
                         <div class="summary-content">
-                            <span class="cond-title">Condition 2 · Systemic Credit Stress</span>
-                            <span class="cond-subtitle">Monetary order under pressure</span>
+                            <span class="cond-title" id="c2-expl-title">Condition 2 · Systemic Credit Stress</span>
+                            <span class="cond-subtitle" id="c2-expl-sub">Monetary order under pressure</span>
                         </div>
                     </summary>
                     <div class="detail-body">
-                        <p>This condition looks for stress at the level of the monetary system itself — not short-term volatility, but structural threats: banking crises, sovereign debt risks, central bank pivots to massive easing, or credibility loss in reserve currencies.</p>
-                        <p><strong>Important distinction:</strong> Geopolitical conflicts, individual defaults, or election uncertainty are NOT sufficient triggers. The condition requires systemic-level stress — when the monetary order itself is threatened.</p>
+                        <p id="c2-expl-body1">This condition looks for stress at the level of the monetary system itself — not short-term volatility, but structural threats: banking crises, sovereign debt risks, central bank pivots to massive easing, or credibility loss in reserve currencies.</p>
+                        <p id="c2-expl-body2"><strong>Important distinction:</strong> Geopolitical conflicts, individual defaults, or election uncertainty are NOT sufficient triggers. The condition requires systemic-level stress — when the monetary order itself is threatened.</p>
                         <div class="range-box">
-                            <strong>Key indicators:</strong><br>
+                            <strong id="c2-expl-range-title">Key indicators:</strong><br>
+                            <span id="c2-expl-range-list">
                             · High-yield credit spread (BAMLH0A0HYM2): stress above 600bps<br>
                             · Fed balance sheet expansion (QE signal): WALCL rapid growth<br>
                             · Dollar index direction: weakness signals reserve currency stress
+                            </span>
                         </div>
                     </div>
                 </details>
@@ -406,80 +410,30 @@
                 <details class="detail-card">
                     <summary>
                         <div class="summary-content">
-                            <span class="cond-title">Condition 3 · CB Gold Buying</span>
-                            <span class="cond-subtitle">The structural floor — added after 2022</span>
+                            <span class="cond-title" id="c3-expl-title">Condition 3 · CB Gold Buying</span>
+                            <span class="cond-subtitle" id="c3-expl-sub">The structural floor — added after 2022</span>
                         </div>
                     </summary>
                     <div class="detail-body">
-                        <p>This condition was added to the original framework after the 2022 mechanism breakdown, when gold rose despite rising real rates — contradicting decades of historical correlation.</p>
-                        <p>The cause: Following the freezing of Russia's foreign exchange reserves in 2022, central banks worldwide — especially in emerging markets — began structurally diversifying away from dollar assets into gold. Annual central bank gold purchases exceeded 1,000 tonnes for three consecutive years (2022–2024), double the prior decade's average.</p>
-                        <p>These buyers are price-insensitive. They buy for strategic reserve diversification, not yield. This creates a persistent price floor that operates independently of real interest rates.</p>
-                        <p>When this condition is active, Condition 1 headwinds are partially offset — gold may not rally, but it won't collapse either.</p>
+                        <p id="c3-expl-body1">This condition was added to the original framework after the 2022 mechanism breakdown, when gold rose despite rising real rates — contradicting decades of historical correlation.</p>
+                        <p id="c3-expl-body2">The cause: Following the freezing of Russia's foreign exchange reserves in 2022, central banks worldwide — especially in emerging markets — began structurally diversifying away from dollar assets into gold. Annual central bank gold purchases exceeded 1,000 tonnes for three consecutive years (2022–2024), double the prior decade's average.</p>
+                        <p id="c3-expl-body3">These buyers are price-insensitive. They buy for strategic reserve diversification, not yield. This creates a persistent price floor that operates independently of real interest rates.</p>
+                        <p id="c3-expl-body4">When this condition is active, Condition 1 headwinds are partially offset — gold may not rally, but it won't collapse either.</p>
                     </div>
                 </details>
             </div>
 
             <div class="validation-section">
-                <h3>Historical Validation · 历史验证</h3>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="tl-date">1972–1980</div>
-                        <div class="tl-content">
-                            <div class="tl-sig sig-hold">HOLD</div>
-                            <div class="tl-cond">Real rates deeply negative + Bretton Woods collapse</div>
-                            <div class="tl-res">Gold: $35 → $675 (+938%)</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="tl-date">1980–2001</div>
-                        <div class="tl-content">
-                            <div class="tl-sig sig-avoid">AVOID</div>
-                            <div class="tl-cond">Volcker pushed real rates to +5%, no credit stress</div>
-                            <div class="tl-res">Gold fell 70% over 21 years. Avoiding gold was correct.</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="tl-date">2001–2012</div>
-                        <div class="tl-content">
-                            <div class="tl-sig sig-hold">HOLD</div>
-                            <div class="tl-cond">Real rates turned negative + 2008 financial crisis</div>
-                            <div class="tl-res">Gold: $272 → $1,650 (+506%)</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="tl-date">2013–2018</div>
-                        <div class="tl-content">
-                            <div class="tl-sig sig-avoid">AVOID</div>
-                            <div class="tl-cond">Taper tantrum, rate hikes, no systemic stress</div>
-                            <div class="tl-res">Gold fell 35%. Avoiding gold was correct.</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="tl-date">2019–2025</div>
-                        <div class="tl-content">
-                            <div class="tl-sig sig-hold">HOLD</div>
-                            <div class="tl-cond">Fed pivot + real rates falling + CB structural buying</div>
-                            <div class="tl-res">Gold: $1,300 → $4,600+ (+254%)</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="tl-date">2026 Now</div>
-                        <div class="tl-content">
-                            <div class="tl-sig sig-avoid">AVOID / WATCH</div>
-                            <div class="tl-cond">Real rates +2%, Iran war pushing inflation higher, Fed on hold. Condition 3 provides floor but no catalyst.</div>
-                            <div class="tl-res">Gold fell from $5,200 to $4,600. Model correctly flagged headwinds before the drop.</div>
-                        </div>
-                    </div>
+                <h3 id="hist-title">Historical Validation · 历史验证</h3>
+                <div class="timeline" id="timeline-container">
+                    <!-- Timeline items rendered via JS -->
                 </div>
             </div>
 
             <div class="limitation-box">
-                <h4>Model Limitations · 重要局限</h4>
-                <ul>
-                    <li>This model operates on quarterly to multi-year cycles. It has generated only ~5 major signal changes in 50 years. Do not use it for short-term trading decisions.</li>
-                    <li>The model identifies macro environment — not entry price. After a HOLD signal, gold may still decline 20–30% before the trend begins. You must be able to hold through volatility.</li>
-                    <li>The 2022 mechanism shift is real. Real rates alone no longer explain gold prices. Condition 3 (central bank buying) now operates as an independent structural driver.</li>
-                    <li>This tool does not tell you how much gold to hold, when exactly to buy or sell, or what price target to use. Those decisions require personal financial advice.</li>
+                <h4 id="lim-title">Model Limitations · 重要局限</h4>
+                <ul id="lim-list">
+                    <!-- Limitations items rendered via JS -->
                 </ul>
             </div>
         </section>
@@ -525,6 +479,44 @@
                 chart1: "10-Year TIPS Real Yield Trend (%)",
                 chart2: "High-Yield Credit Spread Trend (bps)",
                 contribute: "Contribute on GitHub",
+                theoryTitle: "About This Model · Model Theory",
+                whatTitle: "What This Model Does",
+                whatText: "This is a macroeconomic environment detector, not a price predictor. It answers one question: Is the current macro environment suitable for holding gold? The model monitors three structural conditions and outputs a signal — not a buy/sell recommendation, but an assessment of whether macro tailwinds or headwinds currently dominate.",
+                c1Title: "Condition 1 · Real Interest Rates",
+                c1Sub: "The most critical factor",
+                c1Body1: "Real interest rate = Nominal rate − Inflation expectations. When this number is negative or falling rapidly, the opportunity cost of holding gold disappears — cash and bonds lose real value, making gold relatively more attractive.",
+                c1Body2: "The direction of change matters more than the absolute level. A real rate falling from +2% toward 0% is often more powerful for gold than a rate already at -1% but stable.",
+                c1RangeTitle: "Signal range:",
+                c1RangeList: "· Below 0%: Score 85–100 (strongly favorable)<br>· 0% to +1%: Score 60–80 (neutral to positive)<br>· +1% to +2%: Score 25–50 (headwind)<br>· Above +2%: Score 0–20 (strong headwind)",
+                c1Watch: "Watch: 10-Year TIPS Yield (FRED: DFII10)",
+                c2Title: "Condition 2 · Systemic Credit Stress",
+                c2Sub: "Monetary order under pressure",
+                c2Body1: "This condition looks for stress at the level of the monetary system itself — not short-term volatility, but structural threats: banking crises, sovereign debt risks, central bank pivots to massive easing, or credibility loss in reserve currencies.",
+                c2Body2: "Geopolitical conflicts, individual defaults, or election uncertainty are NOT sufficient triggers. The condition requires systemic-level stress — when the monetary order itself is threatened.",
+                c2RangeTitle: "Key indicators:",
+                c2RangeList: "· High-yield credit spread (BAMLH0A0HYM2): stress above 600bps<br>· Fed balance sheet expansion (QE signal): WALCL rapid growth<br>· Dollar index direction: weakness signals reserve currency stress",
+                c3Title: "Condition 3 · CB Gold Buying",
+                c3Sub: "The structural floor — added after 2022",
+                c3Body1: "This condition was added to the original framework after the 2022 mechanism breakdown, when gold rose despite rising real rates — contradicting decades of historical correlation.",
+                c3Body2: "The cause: Following the freezing of Russia's foreign exchange reserves in 2022, central banks worldwide — especially in emerging markets — began structurally diversifying away from dollar assets into gold. Annual purchases exceeded 1,000 tonnes for three consecutive years (2022–2024).",
+                c3Body3: "These buyers are price-insensitive. They buy for strategic reserve diversification, not yield. This creates a persistent price floor that operates independently of real interest rates.",
+                c3Body4: "When this condition is active, Condition 1 headwinds are partially offset — gold may not rally, but it won't collapse either.",
+                validationTitle: "Historical Validation · History",
+                timeline: [
+                    { date: "1972–1980", sig: "HOLD", class: "sig-hold", cond: "Real rates deeply negative + Bretton Woods collapse", res: "Gold: $35 → $675 (+938%)" },
+                    { date: "1980–2001", sig: "AVOID", class: "sig-avoid", cond: "Volcker pushed real rates to +5%, no credit stress", res: "Gold fell 70% over 21 years. Avoiding gold was correct." },
+                    { date: "2001–2012", sig: "HOLD", class: "sig-hold", cond: "Real rates turned negative + 2008 financial crisis", res: "Gold: $272 → $1,650 (+506%)" },
+                    { date: "2013–2018", sig: "AVOID", class: "sig-avoid", cond: "Taper tantrum, rate hikes, no systemic stress", res: "Gold fell 35%. Avoiding gold was correct." },
+                    { date: "2019–2025", sig: "HOLD", class: "sig-hold", cond: "Fed pivot + real rates falling + CB structural buying", res: "Gold: $1,300 → $4,600+ (+254%)" },
+                    { date: "2026 Now", sig: "AVOID / WATCH", class: "sig-avoid", cond: "Real rates +2%, Iran war pushing inflation higher, Fed on hold. Condition 3 provides floor but no catalyst.", res: "Gold fell from $5,200 to $4,600. Model correctly flagged headwinds before the drop." }
+                ],
+                limTitle: "Model Limitations · Critical Notes",
+                limitations: [
+                    "This model operates on quarterly to multi-year cycles. It has generated only ~5 major signal changes in 50 years. Do not use it for short-term trading decisions.",
+                    "The model identifies macro environment — not entry price. After a HOLD signal, gold may still decline 20–30% before the trend begins. You must be able to hold through volatility.",
+                    "The 2022 mechanism shift is real. Real rates alone no longer explain gold prices. Condition 3 (central bank buying) now operates as an independent structural driver.",
+                    "This tool does not tell you how much gold to hold, when exactly to buy or sell, or what price target to use."
+                ],
                 signals: {
                     HOLD: { label: "HOLD", desc: "Real rates low & credit stress contained. Environment favorable for gold." },
                     STRUCTURAL_SUPPORT: { label: "STRUCTURAL SUPPORT", desc: "Central bank structural buying provides a floor despite macro headwinds." },
@@ -552,6 +544,44 @@
                 chart1: "10年期 TIPS 实际收益率趋势 (%)",
                 chart2: "高收益债利差趋势 (bps)",
                 contribute: "在 GitHub 上参与项目贡献",
+                theoryTitle: "关于这个模型 · 关于",
+                whatTitle: "这个模型是做什么的",
+                whatText: "这是一个宏观环境检测器，而非价格预测器。它回答一个问题：当前的宏观环境是否适合持有黄金？模型监测三个结构性条件并输出信号——不是买入/卖出建议，而是对宏观利好或利空当前是否占据主导地位的评估。",
+                c1Title: "条件 1 · 实际利率",
+                c1Sub: "核心影响因素",
+                c1Body1: "实际利率 = 名义利率 - 通胀预期。当这个数值为负或快速下降时，持有黄金的机会成本消失——现金和债券失去实际价值，使黄金相对更具吸引力。",
+                c1Body2: "关键洞察：变化的趋势比绝对水平更重要。实际利率从 +2% 回落至 0% 对金价的推动力往往比利率已经处于 -1% 但保持稳定要强得多。",
+                c1RangeTitle: "信号范围：",
+                c1RangeList: "· 低于 0%: 评分 85–100 (极度有利)<br>· 0% to +1%: 评分 60–80 (中性偏多)<br>· +1% to +2%: 评分 25–50 (面临逆风)<br>· 高于 +2%: 评分 0–20 (强力逆风)",
+                c1Watch: "观测指标：10年期 TIPS 收益率 (FRED: DFII10)",
+                c2Title: "条件 2 · 系统性信用压力",
+                c2Sub: "货币秩序承受压力",
+                c2Body1: "该条件寻找货币体系层面的压力——不是短期波动，而是结构性威胁：银行危机、主权债务风险、央行转向大规模宽松，或储备货币信誉流失。",
+                c2Body2: "重要区别：地缘政治冲突、个人违约或选举不确定性本身不足以触发。该条件需要系统级别的压力——当货币秩序本身受到威胁时。",
+                c2RangeTitle: "关键指标：",
+                c2RangeList: "· 高收益债利差 (高于 600bps)<br>· 美联储负债表扩张 (QE 信号)<br>· 美元指数方向：走弱信号代表储备货币压力",
+                c3Title: "条件 3 · 央行结构性购金",
+                c3Sub: "结构性底部 —— 2022年后加入",
+                c3Body1: "2022 年机制断裂后，该条件被加入到原有的框架中。当时尽管实际利率上升，金价依然上涨——这与过去几十年的历史相关性相矛盾。",
+                c3Body2: "原因：2022 年西方冻结外汇储备后，全球央行——尤其是新兴市场央行——开始结构性地去美元化并增持黄金。连续三年购金量超过 1000 吨。",
+                c3Body3: "这些买家对价格不敏感。他们的购金行为是出于战略性储备多元化，而非收益率。这创造了一个独立于实际利率的持久价格底部。",
+                c3Body4: "当该条件激活时，条件 1 的逆风会被部分抵消——黄金可能不会暴涨，但也不会崩盘。",
+                validationTitle: "历史验证 · 历史",
+                timeline: [
+                    { date: "1972–1980", sig: "持有 · HOLD", class: "sig-hold", cond: "实际利率深度为负 + 布雷顿森林体系崩溃", res: "黄金：$35 → $675 (+938%)" },
+                    { date: "1980–2001", sig: "回避 · AVOID", class: "sig-avoid", cond: "沃尔克将实际利率推高至 +5%，无信用压力", res: "黄金跌幅达 70%。避开黄金是正确的。" },
+                    { date: "2001–2012", sig: "持有 · HOLD", class: "sig-hold", cond: "实际利率转为负数 + 2008 金融危机", res: "黄金：$272 → $1,650 (+506%)" },
+                    { date: "2013–2018", sig: "回避 · AVOID", class: "sig-avoid", cond: "缩减恐慌、加息、无系统性压力", res: "黄金下跌 35%。避开黄金是正确的。" },
+                    { date: "2019–2025", sig: "持有 · HOLD", class: "sig-hold", cond: "美联储转向 + 实际利率下降 + 央行结构性购金", res: "黄金：$1,300 → $4,600+ (+254%)" },
+                    { date: "2026 现在", sig: "回避 / 观望", class: "sig-avoid", cond: "实际利率 +2%，由于中东局势推高通胀，美联储维持现状。条件 3 提供底部但没有催化剂。", res: "金价从 $5,200 跌至 $4,600。模型在下跌前正确识别了阻力。" }
+                ],
+                limTitle: "模型局限 · 重要局限",
+                limitations: [
+                    "该模型以季度到几年的周期运行。50 年内仅产生约 5 次重大信号变化。不要用于短期交易决策。",
+                    "模型识别的是宏观环境——而不是买入价格。HOLD 信号后，金价可能仍会经历 20-30% 的回调。",
+                    "2022 年的机制转变是真实的。仅靠实际利率已无法解释金价。条件 3 现在作为一个独立驱动因素运行。",
+                    "本工具不建议持有多少黄金、何时买卖或目标价位。"
+                ],
                 signals: {
                     HOLD: { label: "持有 · HOLD", desc: "实际利率低且信用风险可控，宏观环境对金价有利。" },
                     STRUCTURAL_SUPPORT: { label: "结构性支撑", desc: "尽管宏观环境有阻力，但央行结构性需求提供下限支撑。" },
@@ -579,6 +609,44 @@
                 chart1: "10 Yıllık TIPS Reel Getiri Trendi (%)",
                 chart2: "Yüksek Getirili Kredi Spread Trendi (bps)",
                 contribute: "GitHub'da katkıda bulunun",
+                theoryTitle: "Bu Model Hakkında · Teori",
+                whatTitle: "Bu Model Ne Yapar?",
+                whatText: "Bu bir makroekonomik ortam detektörüdür, bir fiyat tahmincisi değildir. Tek bir soruya cevap verir: Mevcut makro ortam altın tutmak için uygun mu? Model üç yapısal koşulu izler ve bir sinyal üretir; bu bir al/sat tavsiyesi değil, makro rüzgarların mı yoksa engellerin mi baskın olduğunun bir değerlendirmesidir.",
+                c1Title: "Koşul 1 · Reel Faiz Oranları",
+                c1Sub: "En kritik faktör",
+                c1Body1: "Reel faiz oranı = Nominal faiz - Enflasyon beklentileri. Bu sayı negatif olduğunda veya hızla düştüğünde, altın tutmanın fırsat maliyeti ortadan kalkar; nakit ve tahviller gerçek değerini kaybeder, bu da altını nispeten daha cazip hale getirir.",
+                c1Body2: "Değişimin yönu, mutlak seviyeden daha önemlidir. +%2'den %0'a düşen bir reel faiz, zaten -%1'de olan ancak sabit kalan bir faizden altın için genellikle daha güçlü bir katalizördür.",
+                c1RangeTitle: "Sinyal aralığı:",
+                c1RangeList: "· %0 altı: Skor 85–100 (güçlü elverişli)<br>· %0-1 arası: Skor 60–80 (nötr-pozitif)<br>· %1-2 arası: Skor 25–50 (engel)<br>· %2 üzeri: Skor 0-20 (güçlü engel)",
+                c1Watch: "İzle: 10 Yıllık TIPS Getirisi (FRED: DFII10)",
+                c2Title: "Koşul 2 · Sistemik Kredi Baskısı",
+                c2Sub: "Parasal düzen baskı altında",
+                c2Body1: "Bu koşul, parasal sistemin kendi seviyesindeki baskıyı arar; kısa vadeli oynaklığı değil, yapısal tehditleri: bankacılık krizleri, egemen borç riskleri veya rezerv para birimlerine olan güven kaybı.",
+                c2Body2: "Jeopolitik çatışmalar, bireysel temerrütler veya seçim belirsizliği yeterli tetikleyiciler DEĞİLDİR. Koşul, sistemik düzeyde stres gerektirir - parasal düzenin kendisi tehdit edildiğinde.",
+                c2RangeTitle: "Ana göstergeler:",
+                c2RangeList: "· Yüksek getirili kredi spreadi (600bps üzeri)<br>· Fed bilançosu genişlemesi (QE sinyali)<br>· Dolar endeksi yönü: zayıflık rezerv para birimi baskısını simgeler",
+                c3Title: "Koşul 3 · MB Yapısal Altın Alımı",
+                c3Sub: "Yapısal taban - 2022'den sonra eklendi",
+                c3Body1: "Bu koşul, reel faizlerin yükselmesine rağmen altının yükseldiği ve on yıllardır devam eden tarihsel korelasyonla çeliştiği 2022 mekanizma kırılmasından sonra çerçeveye eklendi.",
+                c3Body2: "Neden: 2022'de yabancı rezervlerin dondurulmasının ardından, dünya çapındaki merkez bankaları yapısal olarak dolar varlıklarından altın lehine çeşitlenmeye başladı. Alımlar üç yıl üst üste 1.000 tonu aştı.",
+                c3Body3: "Bu alıcılar fiyata duyarsızdır. Getiri için değil, stratejik rezerv çeşitlendirmesi için satın alırlar. Bu, reel faiz oranlarından bağımsız olarak çalışan kalıcı bir fiyat tabanı oluşturur.",
+                c3Body4: "Bu koşul aktif olduğunda, Koşul 1 engelleri kısmen dengelenir - altın yükselmeyebilir, ancak çökmez de.",
+                validationTitle: "Tarihsel Doğrulama · Geçmiş",
+                timeline: [
+                    { date: "1972–1980", sig: "TUT · HOLD", class: "sig-hold", cond: "Reel faizler derin negatif + Bretton Woods çöküşü", res: "Altın: $35 → $675 (+%938)" },
+                    { date: "1980–2001", sig: "KAÇIN · AVOID", class: "sig-avoid", cond: "Volcker reel faizleri +%5'e çıkardı, kredi baskısı yok", res: "Altın 21 yılda %70 düştü. Altından kaçınmak doğruydu." },
+                    { date: "2001–2012", sig: "TUT · HOLD", class: "sig-hold", cond: "Reel faizler negatife döndü + 2008 finansal krizi", res: "Altın: $272 → $1,650 (+%506)" },
+                    { date: "2013–2018", sig: "KAÇIN · AVOID", class: "sig-avoid", cond: "Taper tantrum, faiz artışları, sistemik baskı yok", res: "Altın %35 düştü. Altından kaçınmak doğruydu." },
+                    { date: "2019–2025", sig: "TUT · HOLD", class: "sig-hold", cond: "Fed değişimi + düşen reel faizler + MB yapısal alımı", res: "Altın: $1,300 → $4,600+ (+%254)" },
+                    { date: "2026 Şimdi", sig: "KAÇIN / İZLE", class: "sig-avoid", cond: "Reel faizler +%2, İran savaşı enflasyonu yükseltiyor, Fed beklemede. Koşul 3 taban sağlıyor ancak katalizör yok.", res: "Altın 5.200 dolardan 4.600 dolara düştü. Model düşüşten önce engelleri doğru bir şekilde işaretledi." }
+                ],
+                limTitle: "Model Sınırlamaları · Kritik Notlar",
+                limitations: [
+                    "Bu model çeyreklik ila çok yıllık döngülerde çalışır. 50 yılda yalnızca yaklaşık 5 büyük sinyal değişikliği üretmiştir.",
+                    "Model makro ortamı tanımlar, giriş fiyatını değil. Bir TUT sinyalinden sonra altın hala %20-30 düşebilir.",
+                    "2022 mekanizma değişimi gerçektir. Artık tek başına reel faizler altın fiyatlarını açıklayamaz.",
+                    "Bu araç size ne kadar altın tutacağınızı veya tam olarak ne zaman alıp satacağınızı söylemez."
+                ],
                 signals: {
                     HOLD: { label: "TUT · HOLD", desc: "Reel faizler düşük ve kredi riski kontrol altında. Ortam altın için elverişli." },
                     STRUCTURAL_SUPPORT: { label: "YAPISAL DESTEK", desc: "Makro engellere rağmen merkez bankası alımları yapısal destek sağlıyor." },
@@ -616,6 +684,51 @@
             document.getElementById('chart1-title').innerText = t.chart1;
             document.getElementById('chart2-title').innerText = t.chart2;
             document.getElementById('contribute-text').innerText = t.contribute;
+
+            // Update Theory Section
+            document.getElementById('theory-title').innerText = t.theoryTitle;
+            document.getElementById('theory-intro-title').innerText = t.whatTitle;
+            document.getElementById('theory-intro-content').innerText = t.whatText;
+            
+            document.getElementById('c1-expl-title').innerText = t.c1Title;
+            document.getElementById('c1-expl-sub').innerText = t.c1Sub;
+            document.getElementById('c1-expl-body1').innerText = t.c1Body1;
+            document.getElementById('c1-expl-body2').innerHTML = `<strong>${currentLang === 'zh' ? '关键洞察' : (currentLang === 'tr' ? 'Önemli ipucu' : 'Key insight')}:</strong> ${t.c1Body2}`;
+            document.getElementById('c1-expl-range-title').innerText = t.c1RangeTitle;
+            document.getElementById('c1-expl-range-list').innerHTML = t.c1RangeList;
+            document.getElementById('c1-expl-watch').innerText = t.c1Watch;
+
+            document.getElementById('c2-expl-title').innerText = t.c2Title;
+            document.getElementById('c2-expl-sub').innerText = t.c2Sub;
+            document.getElementById('c2-expl-body1').innerText = t.c2Body1;
+            document.getElementById('c2-expl-body2').innerHTML = `<strong>${currentLang === 'zh' ? '重要区别' : (currentLang === 'tr' ? 'Önemli ayrım' : 'Important distinction')}:</strong> ${t.c2Body2}`;
+            document.getElementById('c2-expl-range-title').innerText = t.c2RangeTitle;
+            document.getElementById('c2-expl-range-list').innerHTML = t.c2RangeList;
+
+            document.getElementById('c3-expl-title').innerText = t.c3Title;
+            document.getElementById('c3-expl-sub').innerText = t.c3Sub;
+            document.getElementById('c3-expl-body1').innerText = t.c3Body1;
+            document.getElementById('c3-expl-body2').innerText = t.c3Body2;
+            document.getElementById('c3-expl-body3').innerText = t.c3Body3;
+            document.getElementById('c3-expl-body4').innerText = t.c3Body4;
+
+            document.getElementById('hist-title').innerText = t.validationTitle;
+            
+            const tlContainer = document.getElementById('timeline-container');
+            tlContainer.innerHTML = t.timeline.map(item => `
+                <div class="timeline-item">
+                    <div class="tl-date">${item.date}</div>
+                    <div class="tl-content">
+                        <div class="tl-sig ${item.class}">${item.sig}</div>
+                        <div class="tl-cond">${item.cond}</div>
+                        <div class="tl-res">${item.res}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('lim-title').innerText = t.limTitle;
+            const limList = document.getElementById('lim-list');
+            limList.innerHTML = t.limitations.map(lim => `<li>${lim}</li>`).join('');
 
             if (latestData) updateSignalAndScores(latestData);
         }
