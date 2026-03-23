@@ -231,6 +231,42 @@
             .signal-label { font-size: 32px; }
             .signal-desc { font-size: 15px; }
         }
+
+        /* Theory Section Styles */
+        .theory-section { margin-top: 80px; margin-bottom: 60px; }
+        .section-title { font-size: 24px; font-weight: 700; margin-bottom: 30px; border-left: 4px solid var(--accent-blue); padding-left: 15px; }
+        .theory-card { background: var(--card-bg); backdrop-filter: blur(var(--glass-blur)); border-radius: var(--border-radius); padding: 30px; border: 1px solid var(--card-border); margin-bottom: 30px; }
+        .theory-card h3 { font-size: 18px; margin-bottom: 15px; color: var(--text-primary); }
+        .theory-card p { color: var(--text-secondary); font-size: 15px; line-height: 1.7; }
+
+        .conditions-explainer { display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px; }
+        .detail-card { background: var(--card-bg); border-radius: var(--border-radius); border: 1px solid var(--card-border); overflow: hidden; transition: all 0.3s; }
+        .detail-card[open] { border-color: rgba(255,255,255,0.2); }
+        summary { padding: 20px 25px; cursor: pointer; list-style: none; display: flex; align-items: center; }
+        summary::-webkit-details-marker { display: none; }
+        .summary-content { display: flex; flex-direction: column; }
+        .cond-title { font-size: 17px; font-weight: 700; color: var(--text-primary); }
+        .cond-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+        .detail-body { padding: 0 25px 25px 25px; color: var(--text-secondary); font-size: 15px; line-height: 1.6; }
+        .detail-body p { margin-bottom: 15px; }
+        .range-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin: 15px 0; font-family: monospace; font-size: 13px; border: 1px solid rgba(255,255,255,0.05); }
+        .watch-text { font-size: 12px; color: var(--accent-blue); font-weight: 600; text-transform: uppercase; }
+
+        .validation-section { margin-bottom: 40px; }
+        .validation-section h3 { font-size: 18px; margin-bottom: 25px; }
+        .timeline { position: relative; padding-left: 30px; border-left: 1px solid rgba(255,255,255,0.1); }
+        .timeline-item { position: relative; margin-bottom: 30px; }
+        .timeline-item::before { content: ''; position: absolute; left: -35px; top: 0; width: 10px; height: 10px; border-radius: 50%; background: var(--text-secondary); border: 2px solid var(--bg-color); }
+        .tl-date { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+        .tl-content { background: rgba(255,255,255,0.03); padding: 15px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .tl-sig { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 800; margin-bottom: 10px; }
+        .tl-cond { font-size: 13px; color: var(--text-primary); margin-bottom: 5px; font-weight: 500; }
+        .tl-res { font-size: 13px; color: var(--text-secondary); }
+
+        .limitation-box { background: rgba(133, 77, 14, 0.1); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: var(--border-radius); padding: 25px; margin-bottom: 40px; }
+        .limitation-box h4 { color: var(--warning); margin-bottom: 15px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+        .limitation-box ul { padding-left: 20px; color: var(--text-secondary); font-size: 14px; }
+        .limitation-box li { margin-bottom: 10px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -315,6 +351,136 @@
             <div class="chart-container">
                 <h3 id="chart2-title">High-Yield Credit Spread Trend (bps)</h3>
                 <canvas id="chart2"></canvas>
+            </div>
+        </section>
+
+        <section class="theory-section">
+            <h2 class="section-title">About This Model · 关于这个模型</h2>
+            
+            <div class="theory-card">
+                <h3>What This Model Does</h3>
+                <p>This is a macroeconomic environment detector, not a price predictor. It answers one question: Is the current macro environment suitable for holding gold? The model monitors three structural conditions and outputs a signal — not a buy/sell recommendation, but an assessment of whether macro tailwinds or headwinds currently dominate.</p>
+            </div>
+
+            <div class="conditions-explainer">
+                <details class="detail-card">
+                    <summary>
+                        <div class="summary-content">
+                            <span class="cond-title">Condition 1 · Real Interest Rates</span>
+                            <span class="cond-subtitle">The most critical factor</span>
+                        </div>
+                    </summary>
+                    <div class="detail-body">
+                        <p>Real interest rate = Nominal rate − Inflation expectations. When this number is negative or falling rapidly, the opportunity cost of holding gold disappears — cash and bonds lose real value, making gold relatively more attractive.</p>
+                        <p><strong>Key insight:</strong> The direction of change matters more than the absolute level. A real rate falling from +2% toward 0% is often more powerful for gold than a rate already at -1% but stable.</p>
+                        <div class="range-box">
+                            <strong>Signal range:</strong><br>
+                            · Below 0%: Score 85–100 (strongly favorable)<br>
+                            · 0% to +1%: Score 60–80 (neutral to positive)<br>
+                            · +1% to +2%: Score 25–50 (headwind)<br>
+                            · Above +2%: Score 0–20 (strong headwind)
+                        </div>
+                        <p class="watch-text">Watch: 10-Year TIPS Yield (FRED: DFII10)</p>
+                    </div>
+                </details>
+
+                <details class="detail-card">
+                    <summary>
+                        <div class="summary-content">
+                            <span class="cond-title">Condition 2 · Systemic Credit Stress</span>
+                            <span class="cond-subtitle">Monetary order under pressure</span>
+                        </div>
+                    </summary>
+                    <div class="detail-body">
+                        <p>This condition looks for stress at the level of the monetary system itself — not short-term volatility, but structural threats: banking crises, sovereign debt risks, central bank pivots to massive easing, or credibility loss in reserve currencies.</p>
+                        <p><strong>Important distinction:</strong> Geopolitical conflicts, individual defaults, or election uncertainty are NOT sufficient triggers. The condition requires systemic-level stress — when the monetary order itself is threatened.</p>
+                        <div class="range-box">
+                            <strong>Key indicators:</strong><br>
+                            · High-yield credit spread (BAMLH0A0HYM2): stress above 600bps<br>
+                            · Fed balance sheet expansion (QE signal): WALCL rapid growth<br>
+                            · Dollar index direction: weakness signals reserve currency stress
+                        </div>
+                    </div>
+                </details>
+
+                <details class="detail-card">
+                    <summary>
+                        <div class="summary-content">
+                            <span class="cond-title">Condition 3 · CB Gold Buying</span>
+                            <span class="cond-subtitle">The structural floor — added after 2022</span>
+                        </div>
+                    </summary>
+                    <div class="detail-body">
+                        <p>This condition was added to the original framework after the 2022 mechanism breakdown, when gold rose despite rising real rates — contradicting decades of historical correlation.</p>
+                        <p>The cause: Following the freezing of Russia's foreign exchange reserves in 2022, central banks worldwide — especially in emerging markets — began structurally diversifying away from dollar assets into gold. Annual central bank gold purchases exceeded 1,000 tonnes for three consecutive years (2022–2024), double the prior decade's average.</p>
+                        <p>These buyers are price-insensitive. They buy for strategic reserve diversification, not yield. This creates a persistent price floor that operates independently of real interest rates.</p>
+                        <p>When this condition is active, Condition 1 headwinds are partially offset — gold may not rally, but it won't collapse either.</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="validation-section">
+                <h3>Historical Validation · 历史验证</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="tl-date">1972–1980</div>
+                        <div class="tl-content">
+                            <div class="tl-sig sig-hold">HOLD</div>
+                            <div class="tl-cond">Real rates deeply negative + Bretton Woods collapse</div>
+                            <div class="tl-res">Gold: $35 → $675 (+938%)</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="tl-date">1980–2001</div>
+                        <div class="tl-content">
+                            <div class="tl-sig sig-avoid">AVOID</div>
+                            <div class="tl-cond">Volcker pushed real rates to +5%, no credit stress</div>
+                            <div class="tl-res">Gold fell 70% over 21 years. Avoiding gold was correct.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="tl-date">2001–2012</div>
+                        <div class="tl-content">
+                            <div class="tl-sig sig-hold">HOLD</div>
+                            <div class="tl-cond">Real rates turned negative + 2008 financial crisis</div>
+                            <div class="tl-res">Gold: $272 → $1,650 (+506%)</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="tl-date">2013–2018</div>
+                        <div class="tl-content">
+                            <div class="tl-sig sig-avoid">AVOID</div>
+                            <div class="tl-cond">Taper tantrum, rate hikes, no systemic stress</div>
+                            <div class="tl-res">Gold fell 35%. Avoiding gold was correct.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="tl-date">2019–2025</div>
+                        <div class="tl-content">
+                            <div class="tl-sig sig-hold">HOLD</div>
+                            <div class="tl-cond">Fed pivot + real rates falling + CB structural buying</div>
+                            <div class="tl-res">Gold: $1,300 → $4,600+ (+254%)</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="tl-date">2026 Now</div>
+                        <div class="tl-content">
+                            <div class="tl-sig sig-avoid">AVOID / WATCH</div>
+                            <div class="tl-cond">Real rates +2%, Iran war pushing inflation higher, Fed on hold. Condition 3 provides floor but no catalyst.</div>
+                            <div class="tl-res">Gold fell from $5,200 to $4,600. Model correctly flagged headwinds before the drop.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="limitation-box">
+                <h4>Model Limitations · 重要局限</h4>
+                <ul>
+                    <li>This model operates on quarterly to multi-year cycles. It has generated only ~5 major signal changes in 50 years. Do not use it for short-term trading decisions.</li>
+                    <li>The model identifies macro environment — not entry price. After a HOLD signal, gold may still decline 20–30% before the trend begins. You must be able to hold through volatility.</li>
+                    <li>The 2022 mechanism shift is real. Real rates alone no longer explain gold prices. Condition 3 (central bank buying) now operates as an independent structural driver.</li>
+                    <li>This tool does not tell you how much gold to hold, when exactly to buy or sell, or what price target to use. Those decisions require personal financial advice.</li>
+                </ul>
             </div>
         </section>
 
