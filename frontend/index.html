@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Macro Signal · 黄金宏观信号系统</title>
+    <meta name="description" content="Macroeconomic environment monitor for gold investment decisions.">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-blue: #3b82f6;
+            --accent-orange: #f97316;
+            --success: #10b981;
+            --success-light: #34d399;
+            --warning: #facc15;
+            --danger: #ef4444;
+            --border-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Loading & Error States */
+        #loading-overlay, #error-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+        #error-overlay { display: none; color: var(--danger); text-align: center; padding: 20px; }
+        .spinner {
+            width: 40px; height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+        }
+        .header-left h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+        .header-left p { color: var(--text-secondary); font-size: 14px; }
+        .header-right { text-align: right; color: var(--text-secondary); font-size: 13px; }
+
+        /* Main Signal Card */
+        .signal-card {
+            border-radius: var(--border-radius);
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        .signal-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+        }
+        .signal-text { font-size: 36px; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .signal-desc { font-size: 16px; opacity: 0.9; font-weight: 500; }
+
+        /* Condition Cards Grid */
+        .conditions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            border: 1px solid #2a2a2a;
+            transition: transform 0.2s ease;
+        }
+        .card:hover { transform: translateY(-4px); }
+        .card-header { margin-bottom: 20px; }
+        .card-title { font-size: 12px; text-transform: uppercase; color: var(--text-secondary); font-weight: 600; letter-spacing: 1px; }
+        .card-subtitle { font-size: 14px; color: var(--text-primary); margin-top: 4px; }
+        
+        /* Progress Bar */
+        .progress-container { height: 8px; background: #333; border-radius: 4px; margin: 15px 0; overflow: hidden; }
+        .progress-bar { height: 100%; width: 0%; transition: width 1s ease-out, background-color 0.3s; }
+        
+        .card-value { font-size: 32px; font-weight: 700; margin-top: 10px; }
+        .card-extra { font-size: 14px; color: var(--text-secondary); margin-top: 5px; }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .chart-container {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            border: 1px solid #2a2a2a;
+            height: 350px;
+            position: relative;
+        }
+        .chart-container h3 { font-size: 16px; margin-bottom: 20px; color: var(--text-secondary); font-weight: 600; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid #222;
+        }
+        .disclaimer { font-size: 12px; color: #555; max-width: 600px; margin: 0 auto; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-right { display: none; }
+            .conditions-grid { grid-template-columns: 1fr; }
+            .signal-text { font-size: 28px; }
+            header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .chart-container { height: 300px; }
+        }
+
+        /* Dynamic Signal Classes */
+        .signal-HOLD { background-color: var(--success); color: white; }
+        .signal-STRUCTURAL_SUPPORT { background-color: var(--success-light); color: #064e3b; }
+        .signal-WATCH { background-color: var(--warning); color: #854d0e; }
+        .signal-AVOID { background-color: var(--danger); color: white; }
+    </style>
+</head>
+<body>
+
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading market data...</p>
+    </div>
+
+    <div id="error-overlay">
+        <h2>⚠️ Unable to connect</h2>
+        <p id="error-message">Failed to fetch the latest signals. Please try again later.</p>
+        <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #333; color: white; border: none; border-radius: 6px; cursor: pointer;">Retry</button>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <h1>Gold Macro Signal</h1>
+                <p>Macroeconomic environment monitor for gold</p>
+            </div>
+            <div class="header-right">
+                <span id="last-updated">Last updated: --</span>
+            </div>
+        </header>
+
+        <section id="signal-section">
+            <div id="main-signal" class="signal-card">
+                <div class="signal-text" id="signal-label">--</div>
+                <div class="signal-desc" id="signal-desc">--</div>
+            </div>
+        </section>
+
+        <section class="conditions-grid">
+            <!-- Condition 1 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Condition 1 · Real Interest Rate</div>
+                    <div class="card-subtitle">10-Year TIPS Yield</div>
+                </div>
+                <div class="progress-container">
+                    <div id="pb1" class="progress-bar"></div>
+                </div>
+                <div class="card-value" id="val1">--</div>
+                <div class="card-extra" id="extra1">Current Yield</div>
+            </div>
+
+            <!-- Condition 2 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Condition 2 · Credit Stress</div>
+                    <div class="card-subtitle">High-Yield Spread</div>
+                </div>
+                <div class="progress-container">
+                    <div id="pb2" class="progress-bar"></div>
+                </div>
+                <div class="card-value" id="val2">--</div>
+                <div class="card-extra" id="extra2">Current Spread</div>
+            </div>
+
+            <!-- Condition 3 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Condition 3 · CB Gold Buying</div>
+                    <div class="card-subtitle">Structural Support</div>
+                </div>
+                <div class="progress-container">
+                    <div id="pb3" class="progress-bar"></div>
+                </div>
+                <div class="card-value" id="val3">--</div>
+                <div class="card-extra" id="extra3">DXY Index</div>
+            </div>
+        </section>
+
+        <section class="charts-section">
+            <div class="chart-container">
+                <h3>10-Year TIPS Real Yield (%)</h3>
+                <canvas id="tipsChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>High-Yield Credit Spread (bps)</h3>
+                <canvas id="spreadChart"></canvas>
+            </div>
+        </section>
+
+        <footer>
+            <p class="disclaimer">
+                This tool provides macroeconomic environment analysis only. It does not constitute investment advice of any kind.<br>
+                本工具仅提供宏观环境数据分析，不构成任何投资建议。
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        const WORKER_URL = 'https://gold-signal-worker.astonysh5064.workers.dev';
+
+        const SIGNAL_MAP = {
+            'HOLD': {
+                label: 'HOLD · 持有',
+                desc: 'Conditions 1 & 2 favorable for gold'
+            },
+            'STRUCTURAL_SUPPORT': {
+                label: 'STRUCTURAL SUPPORT · 结构性支撑',
+                desc: 'Central bank buying provides structural floor'
+            },
+            'WATCH': {
+                label: 'WATCH · 观望',
+                desc: 'Mixed signals — no clear directional edge'
+            },
+            'AVOID': {
+                label: 'AVOID · 回避',
+                desc: 'Real rates elevated, credit stress low'
+            }
+        };
+
+        function getProgressColor(score) {
+            if (score <= 30) return '#ef4444'; // Red
+            if (score <= 60) return '#facc15'; // Yellow
+            return '#10b981'; // Green
+        }
+
+        async function fetchData() {
+            try {
+                const [latestRes, historyRes] = await Promise.all([
+                    fetch(`${WORKER_URL}/api/latest`),
+                    fetch(`${WORKER_URL}/api/scores`)
+                ]);
+
+                const latest = await latestRes.json();
+                const history = await historyRes.json();
+
+                if (!latest.success || !history.success) {
+                    throw new Error('API returned success=false');
+                }
+
+                renderDashboard(latest.data);
+                renderCharts(history.data);
+
+                // Hide loading
+                document.getElementById('loading-overlay').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loading-overlay').style.display = 'none';
+                }, 300);
+
+            } catch (err) {
+                console.error('Fetch error:', err);
+                document.getElementById('loading-overlay').style.display = 'none';
+                document.getElementById('error-overlay').style.display = 'flex';
+                document.getElementById('error-message').innerText = 'System error: ' + err.message;
+            }
+        }
+
+        function renderDashboard(data) {
+            // Header
+            document.getElementById('last-updated').innerText = `Last updated: ${data.date}`;
+
+            // Main Signal
+            const signal = data.overall_signal;
+            const config = SIGNAL_MAP[signal] || { label: signal, desc: '' };
+            const mainSignalCard = document.getElementById('main-signal');
+            
+            mainSignalCard.className = `signal-card signal-${signal}`;
+            document.getElementById('signal-label').innerText = config.label;
+            document.getElementById('signal-desc').innerText = config.desc;
+
+            // Condition 1
+            const score1 = data.condition1_score;
+            const pb1 = document.getElementById('pb1');
+            pb1.style.width = `${score1}%`;
+            pb1.style.backgroundColor = getProgressColor(score1);
+            document.getElementById('val1').innerText = score1;
+            document.getElementById('extra1').innerText = `${data.tips_yield > 0 ? '+' : ''}${data.tips_yield}%`;
+
+            // Condition 2
+            const score2 = data.condition2_score;
+            const pb2 = document.getElementById('pb2');
+            pb2.style.width = `${score2}%`;
+            pb2.style.backgroundColor = getProgressColor(score2);
+            document.getElementById('val2').innerText = score2;
+            document.getElementById('extra2').innerText = `${data.hy_spread} bps`;
+
+            // Condition 3
+            const score3 = data.condition3_score;
+            const pb3 = document.getElementById('pb3');
+            pb3.style.width = `${score3}%`;
+            pb3.style.backgroundColor = getProgressColor(score3);
+            document.getElementById('val3').innerText = score3;
+            document.getElementById('extra3').innerText = `DXY ${data.dollar_index}`;
+        }
+
+        function renderCharts(historyData) {
+            // Sort history by date just in case
+            const sorted = historyData.sort((a, b) => new Date(a.date) - new Date(b.date));
+            const labels = sorted.map(d => d.date);
+
+            // TIPS Chart
+            new Chart(document.getElementById('tipsChart'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '10Y TIPS Yield (%)',
+                        data: sorted.map(d => d.tips_yield),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        pointRadius: 0,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { display: false },
+                        y: { 
+                            grid: { color: '#333' },
+                            ticks: { color: '#888' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        annotation: {
+                            // Handled by chartjs-plugin-annotation if included, 
+                            // but we'll do a simple red line via a second dataset or manual plugin
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'zeroLine',
+                    afterDraw: (chart) => {
+                        const {ctx, scales: {y}} = chart;
+                        const zeroY = y.getPixelForValue(0);
+                        if (zeroY >= chart.chartArea.top && zeroY <= chart.chartArea.bottom) {
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.setLineDash([5, 5]);
+                            ctx.moveTo(chart.chartArea.left, zeroY);
+                            ctx.lineTo(chart.chartArea.right, zeroY);
+                            ctx.lineWidth = 1;
+                            ctx.strokeStyle = '#ef4444';
+                            ctx.stroke();
+                            ctx.restore();
+                        }
+                    }
+                }]
+            });
+
+            // Spread Chart
+            new Chart(document.getElementById('spreadChart'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'HY Spread (bps)',
+                        data: sorted.map(d => d.hy_spread),
+                        borderColor: '#f97316',
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        pointRadius: 0,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { display: false },
+                        y: { 
+                            grid: { color: '#333' },
+                            ticks: { color: '#888' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                },
+                plugins: [{
+                    id: 'thresholdLine',
+                    afterDraw: (chart) => {
+                        const {ctx, scales: {y}} = chart;
+                        const thresholdY = y.getPixelForValue(400);
+                        if (thresholdY >= chart.chartArea.top && thresholdY <= chart.chartArea.bottom) {
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.setLineDash([5, 5]);
+                            ctx.moveTo(chart.chartArea.left, thresholdY);
+                            ctx.lineTo(chart.chartArea.right, thresholdY);
+                            ctx.lineWidth = 1;
+                            ctx.strokeStyle = '#ef4444';
+                            ctx.stroke();
+                            ctx.restore();
+                        }
+                    }
+                }]
+            });
+        }
+
+        // Initialize
+        fetchData();
+    </script>
+</body>
+</html>
