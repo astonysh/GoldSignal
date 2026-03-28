@@ -7,5 +7,7 @@
   "tips_yield": 2.08,
   "hy_spread": 321,
   "fed_balance": 66572,
-  "dollar_index": 120.28
+  "dollar_index": 120.28,
+  "regime": "NEUTRAL（中性市场环境）",
+  "vol_correction": "正常"
 }
