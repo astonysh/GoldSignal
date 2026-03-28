@@ -508,6 +508,8 @@ def save_results(
     score2: float,
     score3: float,
     signal: str,
+    regime_name: str = "",
+    vol_status: str = "",
     output_path: str = "result.json",
 ) -> None:
     """
@@ -526,6 +528,8 @@ def save_results(
         "hy_spread":         round(hy_spread_bps),
         "fed_balance":       round(fed_balance),
         "dollar_index":      round(dollar_index, 2),
+        "regime":            regime_name,
+        "vol_correction":    vol_status,
     }
 
     try:
@@ -621,6 +625,21 @@ def main() -> None:
     )
 
     # 第五步：保存 JSON 结果
+    save_results(
+        today         = today,
+        tips_yield    = tips_yield,
+        hy_spread_bps = hy_bps,
+        fed_balance   = fed_balance,
+        dollar_index  = dollar_index,
+        score1        = score1,
+        score2        = score2,
+        score3        = score3,
+        signal        = signal,
+        regime_name   = regime_name,
+        vol_status    = vol_status,
+    )
+
+    # 准备发送到 Worker 的最终字典
     result = {
         "date":              today,
         "condition1_score":  round(score1),
@@ -634,17 +653,6 @@ def main() -> None:
         "regime":            regime_name,
         "vol_correction":    vol_status,
     }
-    save_results(
-        today         = today,
-        tips_yield    = tips_yield,
-        hy_spread_bps = hy_bps,
-        fed_balance   = fed_balance,
-        dollar_index  = dollar_index,
-        score1        = score1,
-        score2        = score2,
-        score3        = score3,
-        signal        = signal,
-    )
 
     # 发送到 Worker 数据库
     send_to_worker(result)
