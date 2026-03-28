@@ -12,17 +12,17 @@
 A daily automated system that monitors three macroeconomic conditions
 to determine whether the current environment is suitable for holding gold.
 
-Scoring is based on three conditions (each scored 0-100):
+Scoring is based on a **Three-layer Regime Architecture**:
 
-- Condition 1: Real Interest Rates (10-year TIPS yield) — most critical
-- Condition 2: Systemic Credit Stress (high-yield spreads, Fed balance sheet)
-- Condition 3: Central Bank Structural Gold Buying (structural support signal)
+- **Layer 1: Macro Backdrop** (Macro Regime: Stagflation, Overheating, etc.)
+- **Layer 2: Core Conditions** (Real Rates, Credit Stress, Structural Support)
+- **Layer 3: Real-time Correction** (Volatility/Break Detection using GVZ)
 
-Output signals:
-- HOLD — Conditions 1 and 2 both favorable
-- STRUCTURAL_SUPPORT — Condition 3 strong despite headwinds
-- WATCH — Mixed signals, no clear direction
-- AVOID — Conditions 1 and 2 both unfavorable
+Output signals are now **Regime-Adjusted**:
+- HOLD — High confidence holding environment
+- STRUCTURAL_SUPPORT — Headwinds offset by Central Bank demand
+- WATCH — Mixed signals or Regime transition
+- AVOID — Hostile macro environment
 
 ## Data Sources
 
@@ -31,10 +31,12 @@ free and publicly available.
 
 | Indicator | Series ID | Description |
 |-----------|-----------|-------------|
-| 10-Year TIPS Real Yield | DFII10 | Condition 1 core data |
-| High-Yield Credit Spread | BAMLH0A0HYM2 | Condition 2 core data |
-| Fed Balance Sheet | WALCL | Condition 2 supplementary |
-| Dollar Index | DTWEXBGS | Condition 3 adjustment |
+| 10-Year TIPS Real Yield | DFII10 | Core valuation anchor |
+| High-Yield Credit Spread | BAMLH0A0HYM2 | Systemic stress monitor |
+| Dollar Index | DTWEXBGS | Reserve currency strength |
+| Yield Curve (10Y-2Y) | T10Y2Y | Layer 1: Macro Regime |
+| Breakeven Inflation | T10BIE | Layer 1: Inflation expectations |
+| Gold Volatility Index | GVZ | Layer 3: Rule break detection |
 
 ## How to Deploy Your Own
 
@@ -96,17 +98,17 @@ Apache License 2.0 — free to use, modify, and distribute.
 Altin tutmanin mevcut makroekonomik ortamda uygun olup olmadigini
 belirlemek icin uc makroekonomik kosulu her gun otomatik olarak izleyen bir sistem.
 
-Uc kosul (her biri 0-100 puan):
+Puanlama **Üç Katmanlı Rejim Mimarisine** dayanmaktadır:
 
-- Kosul 1: Reel Faiz Oranlari (10 yillik TIPS getirisi) — en kritik gosterge
-- Kosul 2: Sistemik Kredi Baskisi (yuksek getirili tahvil spreadleri, Fed bilancosi)
-- Kosul 3: Merkez Bankasi Yapisal Altin Alimlari (yapisal destek sinyali)
+- **Katman 1: Makro Arka Plan** (Stagflasyon, Aşırı Isınma, vb.)
+- **Katman 2: Temel Koşullar** (Reel Faizler, Kredi Baskısı, Yapısal Destek)
+- **Katman 3: Gerçek Zamanlı Düzeltme** (GVZ kullanarak volatilite tespiti)
 
-Cikti sinyalleri:
+Sinyaller **Rejim Ayarlıdır**:
 - HOLD (Tut)
-- STRUCTURAL_SUPPORT (Yapisal Destek)
-- WATCH (Izle)
-- AVOID (Kacin)
+- STRUCTURAL_SUPPORT (Yapısal Destek)
+- WATCH (İzle)
+- AVOID (Kaçın)
 
 ## Veri Kaynaklari
 
@@ -149,17 +151,17 @@ Apache Lisansı 2.0 — ozgurce kullanin, degistirin ve dagatin.
 
 每日自动监测三个宏观条件，判断当前宏观环境是否适合持有黄金。
 
-三个条件评分（每个 0-100 分）：
+评分基于**三层市场状态（Regime）架构**：
 
-- 条件一：实际利率（10年期TIPS收益率）— 最核心指标
-- 条件二：系统性信用压力（高收益债利差、美联储资产负债表）
-- 条件三：央行结构性购金（结构性支撑信号）
+- **第一层：宏观底色**（宏观 Regime：滞胀、过热、复苏等）
+- **第二层：核心条件**（实际利率、信用压力、结构性支撑）
+- **第三层：实时修正**（利用 GVZ 进行波动率/变点检测）
 
-综合信号：
-- HOLD（持有）— 条件一和条件二同时满足
-- STRUCTURAL_SUPPORT（结构性支撑）— 条件三强劲
-- WATCH（观望）— 条件混合，无明确方向
-- AVOID（回避）— 条件一和条件二同时不利
+综合信号现已经过 **Regime 修正**：
+- HOLD（持有）— 高置信度持有环境
+- STRUCTURAL_SUPPORT（结构性支撑）— 逆风被央行需求抵消
+- WATCH（观望）— 信号混合或状态转换期
+- AVOID（回避）— 恶劣的宏观环境
 
 ## 数据来源
 

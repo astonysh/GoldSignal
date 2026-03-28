@@ -51,8 +51,11 @@ TREND_DAYS = 30
 SERIES_IDS = {
     "DFII10":       "10年期TIPS实际收益率",
     "BAMLH0A0HYM2": "高收益债利差",
-    "WALCL":        "美联储资产负债表",
+    "WALCL":        "美联署资产负债表",
     "DTWEXBGS":     "美元指数",
+    "T10Y2Y":       "收益率曲线斜率 (10Y-2Y)",
+    "T10BIE":       "10年期盈亏平衡通胀率 (BEI)",
+    "GVZ":          "黄金波动率指数 (GVZ)",
 }
 
 # 各指标拉取失败时使用的默认值（基于历史合理区间）
@@ -61,6 +64,9 @@ DEFAULT_VALUES = {
     "BAMLH0A0HYM2": 3.5,    # 单位：%（计算时会乘以100换算为bps）
     "WALCL":        70000,  # 单位：百亿美元（FRED原始单位为百万美元）
     "DTWEXBGS":     104.0,  # 无单位
+    "T10Y2Y":       -0.2,   # 倒挂状态
+    "T10BIE":       2.3,    # 2.3%
+    "GVZ":          15.0,   # 15.0
 }
 
 
@@ -353,6 +359,61 @@ def score_condition3(observations_dollar: list[dict]) -> tuple[float, float]:
 
 
 # ============================================================
+# 新增：Regime 判定（Layer 1 & Layer 3）
+# ============================================================
+
+def compute_macro_regime(
+    observations_slope: list[dict],
+    observations_bei: list[dict]
+) -> tuple[float, str]:
+    """
+    Layer 1 宏观底色判定：
+    根据收益率曲线斜率 (T10Y2Y) 和 通胀预期 (BEI) 进行四象限划分。
+
+    返回：
+        (评分乘数, Regime名称)
+    """
+    slope = get_latest_value(observations_slope, DEFAULT_VALUES["T10Y2Y"])
+    bei   = get_latest_value(observations_bei, DEFAULT_VALUES["T10BIE"])
+
+    # 简化的四象限模型
+    if slope < 0 and bei > 2.2:
+        return 1.25, "STAGFLATION（滞胀/衰退预期）" # 黄金最友好
+    elif slope > 0 and bei > 2.5:
+        return 1.10, "OVERHEATING（过热/二次通胀）"  # 黄金抗通胀
+    elif slope > 0 and bei < 2.0:
+        return 0.85, "RECOVERY（复苏/通缩压力）"   # 对黄金较难受
+    else:
+        return 1.0, "NEUTRAL（中性市场环境）"
+
+
+def compute_volatility_correction(observations_gvz: list[dict]) -> tuple[float, str]:
+    """
+    Layer 3 波动率/变点修正：
+    利用 GVZ (黄金波动率指数) 判定是否存在规律断裂或恐慌。
+
+    返回：
+        (置信度系数, 修正说明)
+    """
+    gvz_latest = get_latest_value(observations_gvz, DEFAULT_VALUES["GVZ"])
+    gvz_recent = get_recent_values(observations_gvz, TREND_DAYS)
+
+    if not gvz_recent:
+        return 1.0, "正常"
+
+    gvz_avg = sum(gvz_recent) / len(gvz_recent)
+
+    if gvz_latest > gvz_avg * 1.3:
+        # 波动率异常爆发（通常是事件冲击），根据索罗斯反身性，降低原有规律的置信度
+        return 0.7, "高波动/规律断裂警告"
+    elif gvz_latest < gvz_avg * 0.7:
+        # 极度波动压缩，可能正在酝酿突破
+        return 1.1, "极度波动压缩（蓄势）"
+    else:
+        return 1.0, "波动正常"
+
+
+# ============================================================
 # 第四部分：综合信号判断
 # ============================================================
 
@@ -360,22 +421,22 @@ def determine_signal(
     score1: float,
     score2: float,
     score3: float,
+    regime_multiplier: float,
+    vol_multiplier: float,
 ) -> str:
     """
-    根据三个条件的评分判断综合信号。
+    根据三个条件的评分及 Regime 修正判断综合信号。
 
-    判断优先级（从上到下，满足第一个条件即返回）：
-        条件一 >= 70 且 条件二 >= 50 → HOLD（持有）
-        条件一 <= 30 且 条件二 <= 30 → AVOID（回避）
-        条件三 >= 85 且 条件一 在 [40, 69] → STRUCTURAL_SUPPORT（结构性支撑）
-        其他 → WATCH（观望）
-
-    返回：
-        信号字符串（"HOLD" / "AVOID" / "STRUCTURAL_SUPPORT" / "WATCH"）
+    计算修正后的核心分：
+    核心分 = (条件一 * 0.6 + 条件二 * 0.4) * regime_multiplier * vol_multiplier
     """
-    if score1 >= 70 and score2 >= 50:
+    # 基础核心分（实际利率占大头）
+    base_avg = (score1 * 0.6 + score2 * 0.4)
+    adjusted_score = base_avg * regime_multiplier * vol_multiplier
+
+    if adjusted_score >= 65:
         return "HOLD"
-    if score1 <= 30 and score2 <= 30:
+    if adjusted_score <= 35:
         return "AVOID"
     if score3 >= 85 and 40 <= score1 <= 69:
         return "STRUCTURAL_SUPPORT"
@@ -404,6 +465,8 @@ def print_results(
     score1: float,
     score2: float,
     score3: float,
+    regime_name: str,
+    vol_status: str,
     signal: str,
 ) -> None:
     """
@@ -412,26 +475,26 @@ def print_results(
     signal_label = SIGNAL_LABELS.get(signal, signal)
 
     print()
-    print("=" * 40)
-    print("黄金宏观信号系统 — 今日评估")
+    print("=" * 50)
+    print("黄金宏观信号系统 V2 (Regime-Based) — 今日评估")
     print(f"日期：{today}")
-    print("=" * 40)
+    print("=" * 50)
     print()
-    print("【原始数据】")
-    print(f"  TIPS实际收益率 (DFII10)：{tips_yield:+.2f}%")
-    print(f"  高收益债利差 (BAMLH0A0HYM2)：{hy_spread_bps:.0f} bps")
-    print(f"  美联储资产负债表 (WALCL)：{fed_balance:,.0f} 亿美元")
-    print(f"  美元指数 (DTWEXBGS)：{dollar_index:.1f}")
+    print("【Layer 1：宏观底色 (Macro Regime)】")
+    print(f"  当前状态：{regime_name}")
     print()
-    print("【条件评分】")
-    print(f"  条件一（实际利率）：{score1:.0f} / 100")
-    print(f"  条件二（信用压力）：{score2:.0f} / 100")
-    print(f"  条件三（结构性支撑）：{score3:.0f} / 100")
+    print("【Layer 2：核心指标 (Core Indicators)】")
+    print(f"  TIPS实际收益率 (DFII10)：{tips_yield:+.2f}% (得分: {score1:.0f})")
+    print(f"  高收益债利差 (BAMLH0A0HYM2)：{hy_spread_bps:.0f} bps (得分: {score2:.0f})")
+    print(f"  美元指数 (DTWEXBGS)：{dollar_index:.1f} (结构支撑: {score3:.0f})")
     print()
-    print("【综合信号】")
+    print("【Layer 3：实时修正 (Real-time Correction)】")
+    print(f"  波动率/变点状态：{vol_status}")
+    print()
+    print("【最终综合信号】")
     print(f"  >>> {signal}（{signal_label}）<<<")
     print()
-    print("=" * 40)
+    print("=" * 50)
     print()
 
 
@@ -527,21 +590,20 @@ def main() -> None:
     # 第一步：拉取所有数据
     all_data = fetch_all_series(api_key)
 
-    observations_dfii10 = all_data.get("DFII10", [])
-    observations_hy     = all_data.get("BAMLH0A0HYM2", [])
-    observations_walcl  = all_data.get("WALCL", [])
-    observations_dollar = all_data.get("DTWEXBGS", [])
+    # 第二步：计算各条件评分及 Regime 修正
+    print("正在计算评分与 Regime 修正...")
 
-    print()
+    # 旧有指标
+    score1, tips_yield    = score_condition1(all_data.get("DFII10", []))
+    score2, hy_bps, fed_balance = score_condition2(all_data.get("BAMLH0A0HYM2", []), all_data.get("WALCL", []))
+    score3, dollar_index  = score_condition3(all_data.get("DTWEXBGS", []))
 
-    # 第二步：计算各条件评分
-    print("正在计算评分...")
-    score1, tips_yield    = score_condition1(observations_dfii10)
-    score2, hy_bps, fed_balance = score_condition2(observations_hy, observations_walcl)
-    score3, dollar_index  = score_condition3(observations_dollar)
+    # 新增：Regime 与 波动率修正
+    regime_mult, regime_name = compute_macro_regime(all_data.get("T10Y2Y", []), all_data.get("T10BIE", []))
+    vol_mult, vol_status     = compute_volatility_correction(all_data.get("GVZ", []))
 
     # 第三步：判断综合信号
-    signal = determine_signal(score1, score2, score3)
+    signal = determine_signal(score1, score2, score3, regime_mult, vol_mult)
 
     # 第四步：打印结果
     print_results(
@@ -553,10 +615,25 @@ def main() -> None:
         score1        = score1,
         score2        = score2,
         score3        = score3,
+        regime_name   = regime_name,
+        vol_status    = vol_status,
         signal        = signal,
     )
 
     # 第五步：保存 JSON 结果
+    result = {
+        "date":              today,
+        "condition1_score":  round(score1),
+        "condition2_score":  round(score2),
+        "condition3_score":  round(score3),
+        "overall_signal":    signal,
+        "tips_yield":        round(tips_yield, 4),
+        "hy_spread":         round(hy_bps),
+        "fed_balance":       round(fed_balance),
+        "dollar_index":      round(dollar_index, 2),
+        "regime":            regime_name,
+        "vol_correction":    vol_status,
+    }
     save_results(
         today         = today,
         tips_yield    = tips_yield,
@@ -568,18 +645,6 @@ def main() -> None:
         score3        = score3,
         signal        = signal,
     )
-
-    result = {
-        "date":              today,
-        "condition1_score":  round(score1),
-        "condition2_score":  round(score2),
-        "condition3_score":  round(score3),
-        "overall_signal":    signal,
-        "tips_yield":        round(tips_yield, 4),
-        "hy_spread":         round(hy_bps),
-        "fed_balance":       round(fed_balance),
-        "dollar_index":      round(dollar_index, 2),
-    }
 
     # 发送到 Worker 数据库
     send_to_worker(result)

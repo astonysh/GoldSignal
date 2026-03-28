@@ -43,8 +43,9 @@ export default {
         await env.DB.prepare(`
           INSERT INTO daily_scores
             (date, condition1_score, condition2_score, condition3_score,
-             overall_signal, tips_yield, hy_spread, fed_balance, dollar_index)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+             overall_signal, tips_yield, hy_spread, fed_balance, dollar_index,
+             regime, vol_correction)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
           ON CONFLICT(date) DO UPDATE SET
             condition1_score = excluded.condition1_score,
             condition2_score = excluded.condition2_score,
@@ -53,7 +54,9 @@ export default {
             tips_yield = excluded.tips_yield,
             hy_spread = excluded.hy_spread,
             fed_balance = excluded.fed_balance,
-            dollar_index = excluded.dollar_index
+            dollar_index = excluded.dollar_index,
+            regime = excluded.regime,
+            vol_correction = excluded.vol_correction
         `).bind(
           data.date,
           data.condition1_score,
@@ -63,7 +66,9 @@ export default {
           data.tips_yield,
           data.hy_spread,
           data.fed_balance,
-          data.dollar_index
+          data.dollar_index,
+          data.regime,
+          data.vol_correction
         ).run();
 
         return new Response(
@@ -89,7 +94,8 @@ export default {
       try {
         const { results } = await env.DB.prepare(`
           SELECT date, condition1_score, condition2_score, condition3_score,
-                 overall_signal, tips_yield, hy_spread, fed_balance, dollar_index
+                 overall_signal, tips_yield, hy_spread, fed_balance, dollar_index,
+                 regime, vol_correction
           FROM daily_scores
           ORDER BY date DESC
           LIMIT 180
@@ -118,7 +124,8 @@ export default {
       try {
         const result = await env.DB.prepare(`
           SELECT date, condition1_score, condition2_score, condition3_score,
-                 overall_signal, tips_yield, hy_spread, fed_balance, dollar_index
+                 overall_signal, tips_yield, hy_spread, fed_balance, dollar_index,
+                 regime, vol_correction
           FROM daily_scores
           ORDER BY date DESC
           LIMIT 1

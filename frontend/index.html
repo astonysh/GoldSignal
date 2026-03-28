@@ -180,6 +180,22 @@
         .sig-WATCH { background: linear-gradient(135deg, #4a3a0d 0%, #2e2208 100%); border-color: #6d5a2e; }
         .sig-AVOID { background: linear-gradient(135deg, #4a1a1a 0%, #2e0d0d 100%); border-color: #6d2e2e; }
 
+        /* Regime & Status */
+        .regime-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        .regime-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px dashed rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 16px 20px;
+        }
+        .regime-title { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .regime-val { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+
         /* Scores Grid */
         .conditions-section { margin-bottom: 48px; }
         .conditions-grid {
@@ -488,6 +504,17 @@
                 <div class="signal-desc" id="signal-info">--</div>
                 <div id="updated-at" style="font-size: 11px; margin-top: 24px; opacity: 0.6; font-weight: 700; font-variant-numeric: tabular-nums;">--</div>
             </div>
+
+            <div class="regime-box">
+                <div class="regime-card">
+                    <div class="regime-title" id="lbl-regime">Current Macro Regime</div>
+                    <div class="regime-val" id="val-regime">Analyzing...</div>
+                </div>
+                <div class="regime-card">
+                    <div class="regime-title" id="lbl-vol-correction">Real-time Correction</div>
+                    <div class="regime-val" id="val-vol">Stable</div>
+                </div>
+            </div>
         </section>
 
         <section class="conditions-section">
@@ -743,7 +770,9 @@
                     AVOID: { label: "AVOID · 回避", desc: "Macro environment hostile. Strong headwinds present." }
                 },
                 score: "Score",
-                chartMsg: "Insufficient data to render trend."
+                chartMsg: "Insufficient data to render trend.",
+                regimeLabel: "Current Macro Regime",
+                volLabel: "Real-time Correction"
             },
             zh: {
                 title: "黄金宏观信号系统",
@@ -811,7 +840,9 @@
                     AVOID: { label: "回避 · AVOID", desc: "宏观环境恶劣，存在显著的下行阻力。" }
                 },
                 score: "分值",
-                chartMsg: "历史记录不足，暂无法渲染趋势。"
+                chartMsg: "历史记录不足，暂无法渲染趋势。",
+                regimeLabel: "当前宏观 Regime",
+                volLabel: "实时波动率修正"
             },
             tr: {
                 title: "Gold Macro Signal",
@@ -879,7 +910,9 @@
                     AVOID: { label: "KAÇIN · AVOID", desc: "Makro ortam elverişsiz. Güçlü engeller mevcut." }
                 },
                 score: "Skor",
-                chartMsg: "Yeterli veri yok."
+                chartMsg: "Yeterli veri yok.",
+                regimeLabel: "Mevcut Makro Rejim",
+                volLabel: "Gerçek Zamanlı Düzeltme"
             }
         };
 
@@ -909,9 +942,10 @@
             document.getElementById('ext-c2').innerText = t.extSpread;
             document.getElementById('ext-c3').innerText = t.extDxy;
 
-            document.getElementById('chart1-title').innerText = t.chart1;
             document.getElementById('chart2-title').innerText = t.chart2;
             document.getElementById('contribute-text').innerText = t.contribute;
+            document.getElementById('lbl-regime').innerText = t.regimeLabel;
+            document.getElementById('lbl-vol-correction').innerText = t.volLabel;
 
             // Update Theory Section
             document.getElementById('theory-title').innerText = t.theoryTitle;
@@ -1031,6 +1065,10 @@
             document.getElementById('val-c1').innerText = (data.tips_yield > 0 ? '+' : '') + data.tips_yield.toFixed(2);
             document.getElementById('val-c2').innerText = data.hy_spread;
             document.getElementById('val-c3').innerText = data.dollar_index ? data.dollar_index.toFixed(1) : (data.fed_balance / 10).toFixed(0);
+
+            // New Indicators
+            if (data.regime) document.getElementById('val-regime').innerText = data.regime;
+            if (data.vol_correction) document.getElementById('val-vol').innerText = data.vol_correction;
         }
 
         function renderCharts(h) {
