@@ -1,13 +1,13 @@
 {
-  "date": "2026-04-29",
-  "condition1_score": 35,
+  "date": "2026-04-30",
+  "condition1_score": 10,
   "condition2_score": 10,
-  "condition3_score": 65,
+  "condition3_score": 75,
   "overall_signal": "AVOID",
-  "tips_yield": 1.91,
-  "hy_spread": 284,
+  "tips_yield": 2.0,
+  "hy_spread": 285,
   "fed_balance": 67074,
-  "dollar_index": 118.73,
+  "dollar_index": 104.0,
   "regime": "NEUTRAL（中性市场环境）",
   "vol_correction": "正常"
 }
