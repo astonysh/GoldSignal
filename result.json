@@ -1,13 +1,13 @@
 {
-  "date": "2026-05-18",
+  "date": "2026-05-19",
   "condition1_score": 0,
   "condition2_score": 10,
   "condition3_score": 65,
   "overall_signal": "AVOID",
-  "tips_yield": 2.0,
-  "hy_spread": 276,
+  "tips_yield": 2.1,
+  "hy_spread": 280,
   "fed_balance": 67285,
-  "dollar_index": 118.04,
+  "dollar_index": 119.28,
   "regime": "NEUTRAL（中性市场环境）",
   "vol_correction": "正常"
 }
