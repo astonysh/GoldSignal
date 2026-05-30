@@ -1,13 +1,13 @@
 {
-  "date": "2026-05-29",
-  "condition1_score": 10,
-  "condition2_score": 25,
+  "date": "2026-05-30",
+  "condition1_score": 0,
+  "condition2_score": 10,
   "condition3_score": 65,
   "overall_signal": "AVOID",
-  "tips_yield": 2.0,
-  "hy_spread": 350,
-  "fed_balance": 700,
+  "tips_yield": 2.06,
+  "hy_spread": 272,
+  "fed_balance": 67044,
   "dollar_index": 119.29,
-  "regime": "STAGFLATION（滞胀/衰退预期）",
+  "regime": "NEUTRAL（中性市场环境）",
   "vol_correction": "正常"
 }
