@@ -1,5 +1,5 @@
 {
-  "date": "2026-05-31",
+  "date": "2026-06-01",
   "condition1_score": 0,
   "condition2_score": 10,
   "condition3_score": 75,
@@ -8,6 +8,6 @@
   "hy_spread": 272,
   "fed_balance": 700,
   "dollar_index": 104.0,
-  "regime": "STAGFLATION（滞胀/衰退预期）",
+  "regime": "NEUTRAL（中性市场环境）",
   "vol_correction": "正常"
 }
