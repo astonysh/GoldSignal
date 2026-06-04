@@ -1,13 +1,13 @@
 {
-  "date": "2026-06-03",
+  "date": "2026-06-04",
   "condition1_score": 0,
   "condition2_score": 10,
-  "condition3_score": 75,
+  "condition3_score": 65,
   "overall_signal": "AVOID",
   "tips_yield": 2.07,
-  "hy_spread": 272,
-  "fed_balance": 700,
-  "dollar_index": 104.0,
-  "regime": "STAGFLATION（滞胀/衰退预期）",
+  "hy_spread": 271,
+  "fed_balance": 67044,
+  "dollar_index": 118.88,
+  "regime": "NEUTRAL（中性市场环境）",
   "vol_correction": "正常"
 }
