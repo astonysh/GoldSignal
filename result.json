@@ -1,13 +1,13 @@
 {
-  "date": "2026-06-15",
+  "date": "2026-06-16",
   "condition1_score": 0,
   "condition2_score": 10,
   "condition3_score": 65,
   "overall_signal": "AVOID",
-  "tips_yield": 2.16,
-  "hy_spread": 278,
+  "tips_yield": 2.17,
+  "hy_spread": 271,
   "fed_balance": 67254,
-  "dollar_index": 120.08,
+  "dollar_index": 119.51,
   "regime": "NEUTRAL（中性市场环境）",
   "vol_correction": "正常"
 }
