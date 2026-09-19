@@ -1,10 +1,10 @@
 {
-  "date": "2026-09-18",
+  "date": "2026-09-19",
   "condition1_score": 0,
   "condition2_score": 10,
   "condition3_score": 65,
   "overall_signal": "AVOID",
-  "tips_yield": 2.68,
+  "tips_yield": 2.61,
   "hy_spread": 270,
   "fed_balance": 67465,
   "dollar_index": 118.21,
