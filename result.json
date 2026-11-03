@@ -1,13 +1,13 @@
 {
-  "date": "2026-11-02",
+  "date": "2026-11-03",
   "condition1_score": 20,
   "condition2_score": 25,
   "condition3_score": 65,
   "overall_signal": "AVOID",
-  "tips_yield": 2.63,
-  "hy_spread": 326,
+  "tips_yield": 2.6,
+  "hy_spread": 344,
   "fed_balance": 67456,
-  "dollar_index": 121.32,
+  "dollar_index": 121.67,
   "regime": "NEUTRAL（中性市场环境）",
   "vol_correction": "正常"
 }
